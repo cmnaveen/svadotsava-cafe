@@ -3,7 +3,7 @@
  */
 window.SVADOTSAVA_DATA_STORY = {
   "hero": {
-    "badge": "Opening Summer 2027",
+    "badge": "Opening Summer 2029",
     "title": "Svādotsava",
     "tagline": "A Celebration of Taste",
     "headline": "Your Everyday Café, Made Worth Celebrating",
@@ -14,7 +14,7 @@ window.SVADOTSAVA_DATA_STORY = {
     "heroImageAlt": "Svādotsava signature filter coffee"
   },
   "announcement": {
-    "badge": "Opening Summer 2027",
+    "badge": "Opening Summer 2029",
     "title": "A New Café Experience is Coming",
     "subtitle": "Coffee, tea, fresh bakes, toasts, desserts, and café plates will shape our opening menu.",
     "locationText": "South India — exact address to be revealed closer to opening",

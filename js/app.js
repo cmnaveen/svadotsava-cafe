@@ -700,7 +700,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('terms-link')?.addEventListener('click', (e) => {
       e.preventDefault();
-      showModal("Terms & Conditions Notice", "Website content, menus, and timelines represent draft preview details prior to our Summer 2027 opening.", "📜");
+      showModal("Terms & Conditions Notice", "Website content, menus, and timelines represent draft preview details prior to our Summer 2029 opening.", "📜");
     });
   }
 
