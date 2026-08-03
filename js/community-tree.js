@@ -1,9 +1,9 @@
 /**
  * Svādotsava - Interactive Community Digital Tree
  * ------------------------------------------------------------------
- * Symmetrical, fantasy-vector Canvas 2D visualization matching the reference design.
- * Renders a lush circular canopy dome, sculpted organic wood trunk with cyan rim glow,
- * bright neon-green leaves, 5-petal pink cherry blossoms, and plump rose-red coffee cherries.
+ * Interactive Canvas 2D visualization matching the generated vector artwork.
+ * Features a glowing bioluminescent cyan trunk with central spiral knot, flared root network,
+ * radial glowing branches, bright green leaves, 5-petal pink cherry blossoms, and oval coffee cherries.
  */
 
 (() => {
@@ -54,7 +54,7 @@
       reducedMotion: reducedMotionQuery.matches,
       resizeObserver: null,
       pollTimer: null,
-      sparkles: createSparkleParticles(50),
+      sparkles: createSparkleParticles(60),
       foliageClusters: generateFoliageClusters()
     };
 
@@ -218,9 +218,8 @@
     }
 
     function generateFoliageClusters() {
-      // Generate dense leaf cluster positions that form the lush circular canopy dome
       const clusters = [];
-      const count = 160;
+      const count = 180;
       for (let i = 0; i < count; i += 1) {
         const angle = Math.random() * Math.PI * 2;
         const dist = 0.05 + Math.sqrt(Math.random()) * 0.35;
@@ -231,7 +230,7 @@
           y: yRel,
           angle: angle + (Math.random() - 0.5) * 1.2,
           scale: 0.65 + Math.random() * 0.55,
-          colorType: i % 4 // 0: dark forest, 1: rich green, 2: vibrant green, 3: neon highlight
+          colorType: i % 4
         });
       }
       return clusters;
@@ -251,13 +250,13 @@
       // 2. Base canopy background silhouette glow
       drawCanopyAura(width, height);
 
-      // 3. Sculpted flared root base with cyan rim glow
+      // 3. Sculpted flared root base with cyan bioluminescent edge glow
       drawRoots(width, height, seconds);
 
-      // 4. Central organic wood trunk with rich bark texture and cyan rim
+      // 4. Central bioluminescent trunk with spiral swirl knot
       drawTrunk(width, height, seconds);
 
-      // 5. Radial branching network forming the circular crown
+      // 5. Radial glowing branches forming the circular crown
       drawBranches(width, height, seconds);
 
       // 6. Lush dense canopy leaf clusters covering the dome
@@ -309,7 +308,7 @@
     }
 
     function drawAtmosphere(width, height, seconds) {
-      // Dark Charcoal Background
+      // Dark Charcoal Vignette Background
       const bgGrad = context.createLinearGradient(0, 0, 0, height);
       bgGrad.addColorStop(0, '#11141a');
       bgGrad.addColorStop(0.5, '#171b23');
@@ -321,8 +320,8 @@
       const centerX = width * 0.50;
       const centerY = height * 0.36;
       const aura = context.createRadialGradient(centerX, centerY, width * 0.02, centerX, centerY, width * 0.46);
-      aura.addColorStop(0, 'rgba(0, 229, 255, 0.14)');
-      aura.addColorStop(0.38, 'rgba(60, 240, 190, 0.07)');
+      aura.addColorStop(0, 'rgba(0, 247, 255, 0.16)');
+      aura.addColorStop(0.38, 'rgba(60, 240, 190, 0.08)');
       aura.addColorStop(0.75, 'rgba(255, 215, 0, 0.03)');
       aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
       context.fillStyle = aura;
@@ -352,11 +351,11 @@
         const py = height * p.yRel + floatY;
 
         const twinkle = state.reducedMotion ? 0.6 : 0.25 + (Math.sin(seconds * 2.2 + p.phase) + 1) * 0.35;
-        let colorStr = `rgba(0, 229, 255, ${twinkle})`;
+        let colorStr = `rgba(0, 247, 255, ${twinkle})`;
         if (p.colorType === 1) colorStr = `rgba(255, 215, 0, ${twinkle * 0.9})`;
         else if (p.colorType === 2) colorStr = `rgba(100, 255, 218, ${twinkle})`;
 
-        context.shadowColor = p.colorType === 1 ? '#ffd700' : '#00e5ff';
+        context.shadowColor = p.colorType === 1 ? '#ffd700' : '#00f7ff';
         context.shadowBlur = 6 + p.size * 2;
         context.fillStyle = colorStr;
         context.beginPath();
@@ -367,12 +366,11 @@
     }
 
     function drawCanopyAura(width, height) {
-      // Soft green glow aura behind the entire circular canopy dome
       const centerX = width * 0.50;
       const centerY = height * 0.32;
       const canopyGlow = context.createRadialGradient(centerX, centerY, width * 0.05, centerX, centerY, width * 0.38);
-      canopyGlow.addColorStop(0, 'rgba(57, 255, 20, 0.12)');
-      canopyGlow.addColorStop(0.60, 'rgba(16, 185, 129, 0.06)');
+      canopyGlow.addColorStop(0, 'rgba(57, 255, 20, 0.14)');
+      canopyGlow.addColorStop(0.60, 'rgba(16, 185, 129, 0.07)');
       canopyGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
       context.fillStyle = canopyGlow;
       context.beginPath();
@@ -382,12 +380,10 @@
 
     function drawRoots(width, height, seconds) {
       const rootList = [
-        // Symmetrical left roots
-        [[0.47, 0.86], [0.38, 0.90], [0.26, 0.93], [0.12, 0.93], 9.5, '#00e5ff'],
+        [[0.47, 0.86], [0.38, 0.90], [0.26, 0.93], [0.12, 0.93], 9.5, '#00f7ff'],
         [[0.48, 0.88], [0.42, 0.92], [0.34, 0.95], [0.24, 0.96], 6.5, '#64ffda'],
         [[0.49, 0.88], [0.46, 0.93], [0.41, 0.96], [0.36, 0.97], 4.5, '#ffd700'],
-        // Symmetrical right roots
-        [[0.53, 0.86], [0.62, 0.90], [0.74, 0.93], [0.88, 0.93], 9.5, '#00e5ff'],
+        [[0.53, 0.86], [0.62, 0.90], [0.74, 0.93], [0.88, 0.93], 9.5, '#00f7ff'],
         [[0.52, 0.88], [0.58, 0.92], [0.66, 0.95], [0.76, 0.96], 6.5, '#64ffda'],
         [[0.51, 0.88], [0.54, 0.93], [0.59, 0.96], [0.64, 0.97], 4.5, '#ffd700']
       ];
@@ -397,31 +393,28 @@
       context.lineJoin = 'round';
 
       rootList.forEach(([start, cA, cB, end, w, glowColor]) => {
-        // Cyan bioluminescent shadow glow
         context.shadowColor = glowColor;
         context.shadowBlur = 10;
         context.beginPath();
         context.moveTo(width * start[0], height * start[1]);
         context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.strokeStyle = 'rgba(0, 229, 255, 0.35)';
+        context.strokeStyle = 'rgba(0, 247, 255, 0.40)';
         context.lineWidth = w + 4;
         context.stroke();
         context.shadowBlur = 0;
 
-        // Dark Wood Core
         context.beginPath();
         context.moveTo(width * start[0], height * start[1]);
         context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.strokeStyle = '#221915';
+        context.strokeStyle = '#1b2926';
         context.lineWidth = w;
         context.stroke();
 
-        // Cyan Edge Thread
         context.beginPath();
         context.moveTo(width * start[0], height * start[1]);
         context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.strokeStyle = 'rgba(100, 255, 218, 0.8)';
-        context.lineWidth = Math.max(1, w * 0.22);
+        context.strokeStyle = 'rgba(100, 255, 235, 0.85)';
+        context.lineWidth = Math.max(1, w * 0.24);
         context.stroke();
       });
 
@@ -431,17 +424,16 @@
     function drawTrunk(width, height, seconds) {
       context.save();
 
-      // Organic Mahogany Bark Fill
+      // Bioluminescent Swirling Trunk Gradient
       const trunkGrad = context.createLinearGradient(width * 0.40, 0, width * 0.60, 0);
-      trunkGrad.addColorStop(0, '#1c1411');
-      trunkGrad.addColorStop(0.20, '#3d2a1d');
-      trunkGrad.addColorStop(0.50, '#69482e');
-      trunkGrad.addColorStop(0.80, '#3d2a1d');
-      trunkGrad.addColorStop(1, '#1c1411');
+      trunkGrad.addColorStop(0, '#122320');
+      trunkGrad.addColorStop(0.20, '#224840');
+      trunkGrad.addColorStop(0.50, '#367266');
+      trunkGrad.addColorStop(0.80, '#224840');
+      trunkGrad.addColorStop(1, '#122320');
 
-      // Trunk Body with Soft Cyan Rim Glow
-      context.shadowColor = '#00e5ff';
-      context.shadowBlur = 14;
+      context.shadowColor = '#00f7ff';
+      context.shadowBlur = 16;
 
       context.beginPath();
       context.moveTo(width * 0.43, height * 0.88);
@@ -455,10 +447,24 @@
       context.fill();
 
       // Cyan Bioluminescent Rim Lines along Trunk Silhouette
-      context.strokeStyle = 'rgba(0, 229, 255, 0.65)';
-      context.lineWidth = 1.8;
+      context.strokeStyle = 'rgba(0, 247, 255, 0.80)';
+      context.lineWidth = 2.0;
       context.stroke();
       context.shadowBlur = 0;
+
+      // Swirling Spiral Knot matching artwork
+      const swirlX = width * 0.50;
+      const swirlY = height * 0.68;
+      context.beginPath();
+      context.arc(swirlX, swirlY, 11, 0, Math.PI * 2);
+      context.strokeStyle = 'rgba(0, 247, 255, 0.85)';
+      context.lineWidth = 2.2;
+      context.stroke();
+
+      context.beginPath();
+      context.arc(swirlX, swirlY, 5, 0, Math.PI * 2);
+      context.fillStyle = '#64ffda';
+      context.fill();
 
       // Inner Glowing Stardust Threads
       const trunkVeins = [
@@ -472,10 +478,10 @@
         context.moveTo(width * start[0], height * start[1]);
         context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
         const isGold = idx === 1;
-        context.shadowColor = isGold ? '#ffd700' : '#00e5ff';
+        context.shadowColor = isGold ? '#ffd700' : '#00f7ff';
         context.shadowBlur = 8;
-        context.strokeStyle = isGold ? 'rgba(255, 230, 130, 0.65)' : 'rgba(100, 255, 218, 0.7)';
-        context.lineWidth = isGold ? 1.8 : 1.4;
+        context.strokeStyle = isGold ? 'rgba(255, 230, 130, 0.75)' : 'rgba(100, 255, 235, 0.85)';
+        context.lineWidth = isGold ? 2.0 : 1.6;
         context.stroke();
       });
 
@@ -483,32 +489,20 @@
     }
 
     function drawBranches(width, height, seconds) {
-      // Symmetrical Radial Branching Architecture
       const branchPairs = [
-        // Primary Symmetrical Dome Canopy Split (Left & Right)
-        [[0.50, 0.52], [0.38, 0.42], [0.26, 0.32], [0.14, 0.26], 10.5, '#00e5ff'],
-        [[0.50, 0.52], [0.62, 0.42], [0.74, 0.32], [0.86, 0.26], 10.5, '#00e5ff'],
-
-        // Primary Upper Crown Split (Left & Right)
+        [[0.50, 0.52], [0.38, 0.42], [0.26, 0.32], [0.14, 0.26], 10.5, '#00f7ff'],
+        [[0.50, 0.52], [0.62, 0.42], [0.74, 0.32], [0.86, 0.26], 10.5, '#00f7ff'],
         [[0.50, 0.52], [0.44, 0.36], [0.34, 0.22], [0.22, 0.16], 8.5, '#64ffda'],
         [[0.50, 0.52], [0.56, 0.36], [0.66, 0.22], [0.78, 0.16], 8.5, '#64ffda'],
-
-        // Top Leader Crown (Left & Right)
         [[0.50, 0.45], [0.48, 0.28], [0.44, 0.18], [0.38, 0.10], 6.5, '#ffd700'],
         [[0.50, 0.45], [0.52, 0.28], [0.56, 0.18], [0.62, 0.10], 6.5, '#ffd700'],
-        [[0.50, 0.35], [0.50, 0.22], [0.50, 0.14], [0.50, 0.08], 6.0, '#00e5ff'],
-
-        // Mid-Lower Outer Arc Branches (Left & Right)
-        [[0.50, 0.58], [0.36, 0.52], [0.24, 0.48], [0.12, 0.42], 8.0, '#00e5ff'],
-        [[0.50, 0.58], [0.64, 0.52], [0.76, 0.48], [0.88, 0.42], 8.0, '#00e5ff'],
-
-        // Sub-twigs filling out canopy structure
+        [[0.50, 0.35], [0.50, 0.22], [0.50, 0.14], [0.50, 0.08], 6.0, '#00f7ff'],
+        [[0.50, 0.58], [0.36, 0.52], [0.24, 0.48], [0.12, 0.42], 8.0, '#00f7ff'],
+        [[0.50, 0.58], [0.64, 0.52], [0.76, 0.48], [0.88, 0.42], 8.0, '#00f7ff'],
         [[0.38, 0.42], [0.30, 0.38], [0.24, 0.34], [0.18, 0.38], 5.0, '#64ffda'],
         [[0.62, 0.42], [0.70, 0.38], [0.76, 0.34], [0.82, 0.38], 5.0, '#64ffda'],
-
-        [[0.44, 0.36], [0.38, 0.28], [0.32, 0.24], [0.26, 0.26], 4.5, '#00e5ff'],
-        [[0.56, 0.36], [0.62, 0.28], [0.68, 0.24], [0.74, 0.26], 4.5, '#00e5ff'],
-
+        [[0.44, 0.36], [0.38, 0.28], [0.32, 0.24], [0.26, 0.26], 4.5, '#00f7ff'],
+        [[0.56, 0.36], [0.62, 0.28], [0.68, 0.24], [0.74, 0.26], 4.5, '#00f7ff'],
         [[0.36, 0.52], [0.30, 0.50], [0.26, 0.46], [0.22, 0.48], 4.0, '#ffd700'],
         [[0.64, 0.52], [0.70, 0.50], [0.74, 0.46], [0.78, 0.48], 4.0, '#ffd700']
       ];
@@ -531,36 +525,32 @@
         context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
       };
 
-      // Outer Cyan Glow
       context.save();
       context.shadowColor = glowColor;
       context.shadowBlur = 9;
       trace();
-      context.strokeStyle = 'rgba(0, 229, 255, 0.22)';
+      context.strokeStyle = 'rgba(0, 247, 255, 0.28)';
       context.lineWidth = lineWidth + 3.5;
       context.stroke();
       context.shadowBlur = 0;
 
-      // Dark Wood Core
       const branchGrad = context.createLinearGradient(width * start[0], height * start[1], width * end[0], height * end[1]);
-      branchGrad.addColorStop(0, '#54371f');
-      branchGrad.addColorStop(0.5, '#754d2a');
-      branchGrad.addColorStop(1, '#362313');
+      branchGrad.addColorStop(0, '#224840');
+      branchGrad.addColorStop(0.5, '#367266');
+      branchGrad.addColorStop(1, '#1b3b34');
       trace();
       context.strokeStyle = branchGrad;
       context.lineWidth = lineWidth;
       context.stroke();
 
-      // Cyan Rim Line
       trace();
-      context.strokeStyle = 'rgba(100, 255, 218, 0.70)';
-      context.lineWidth = Math.max(0.7, lineWidth * 0.18);
+      context.strokeStyle = 'rgba(100, 255, 235, 0.80)';
+      context.lineWidth = Math.max(0.7, lineWidth * 0.20);
       context.stroke();
       context.restore();
     }
 
     function drawLushCanopy(width, height, seconds) {
-      // Render overlapping leaf clusters forming a lush circular foliage dome
       context.save();
 
       state.foliageClusters.forEach((c, idx) => {
@@ -627,7 +617,6 @@
     }
 
     function drawLeaf() {
-      // Bright neon-green leaf matching reference image
       context.save();
       context.shadowColor = '#39ff14';
       context.shadowBlur = 15;
@@ -650,7 +639,6 @@
       context.stroke();
 
       context.shadowBlur = 0;
-      // Leaf central vein & side veins
       context.beginPath();
       context.moveTo(-13, 2);
       context.quadraticCurveTo(0, -1, 14, -3);
@@ -671,12 +659,10 @@
     }
 
     function drawFlower() {
-      // Glowing 5-petal pink cherry blossom matching reference image
       context.save();
       context.shadowColor = '#ff69b4';
       context.shadowBlur = 18;
 
-      // 5 Rounded Pink Petals
       for (let i = 0; i < 5; i += 1) {
         const angle = -Math.PI / 2 + (Math.PI * 2 * i) / 5;
         const petalGrad = context.createRadialGradient(
@@ -697,7 +683,6 @@
         context.stroke();
       }
 
-      // Bright Yellow Stamen Center
       const centerGrad = context.createRadialGradient(-2, -2, 1, 0, 0, 8);
       centerGrad.addColorStop(0, '#ffeb3b');
       centerGrad.addColorStop(0.6, '#f57c00');
@@ -708,7 +693,6 @@
       context.fillStyle = centerGrad;
       context.fill();
 
-      // Yellow Stamen Anthers
       context.fillStyle = '#fffde7';
       for (let i = 0; i < 5; i += 1) {
         const a = (Math.PI * 2 * i) / 5;
@@ -721,12 +705,10 @@
     }
 
     function drawFruit() {
-      // Oval rose-red coffee cherry matching reference image
       context.save();
       context.shadowColor = '#e60039';
       context.shadowBlur = 18;
 
-      // Small 10px Green Stem connecting cherry to twig
       context.beginPath();
       context.moveTo(0, -14);
       context.lineTo(0, -3);
@@ -751,13 +733,11 @@
       context.stroke();
 
       context.shadowBlur = 0;
-      // Specular Glossy White Crescent Highlight Arc
       context.beginPath();
       context.ellipse(-4.5, -2, 2.5, 6, -0.40, 0, Math.PI * 2);
       context.fillStyle = 'rgba(255, 255, 255, 0.85)';
       context.fill();
 
-      // Dark Bottom Calyx Tip
       context.fillStyle = '#33000d';
       context.beginPath();
       context.arc(0, 22.5, 2.2, 0, Math.PI * 2);
@@ -771,21 +751,20 @@
       const pulse = state.reducedMotion ? 0 : Math.sin(time / 240) * 3;
 
       context.save();
-      context.shadowColor = '#00e5ff';
+      context.shadowColor = '#00f7ff';
       context.shadowBlur = 18;
       context.beginPath();
       context.arc(x, y, baseRadius + pulse, 0, Math.PI * 2);
-      context.strokeStyle = 'rgba(0, 229, 255, 0.95)';
+      context.strokeStyle = 'rgba(0, 247, 255, 0.95)';
       context.lineWidth = 2.8;
       context.stroke();
 
       context.beginPath();
       context.arc(x, y, baseRadius + 7 + pulse * 0.45, 0, Math.PI * 2);
-      context.strokeStyle = 'rgba(100, 255, 218, 0.4)';
+      context.strokeStyle = 'rgba(100, 255, 235, 0.4)';
       context.lineWidth = 1.4;
       context.stroke();
 
-      // Orbiting Sparkles
       for (let i = 0; i < 4; i += 1) {
         const angle = time / 800 + i * Math.PI / 2;
         const sparkleX = x + Math.cos(angle) * (baseRadius + 9.5);
