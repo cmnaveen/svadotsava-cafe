@@ -336,6 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="menu-card-badges">
             ${(item.badges || []).map(b => `<span class="badge badge-forest">${b}</span>`).join('')}
           </div>
+          ${item.hasRecipe ? `
+            <button type="button" class="btn-recipe-trigger" data-recipe-id="${item.recipeId}" data-variant-id="${item.id}">
+              View Recipe 📖
+            </button>
+          ` : ''}
         </div>
       </div>
     `).join('');

@@ -296,10 +296,13 @@ window.SVADOTSAVA_DATA_MENU = {
       "description": "Hand-stretched thin crust topped with tomato sauce, mozzarella, roasted peppers, mushrooms, cherry tomatoes, olives, onion, and basil.",
       "badges": [
         "Vegetarian",
-        "Contains Dairy"
+        "Contains Dairy",
+        "Recipe Guide Available"
       ],
       "image": "assets/images/menu/garden_veg_pizza.webp",
-      "imageAlt": "Vegetarian pizza with roasted peppers, mushrooms, tomatoes, olives, onion, and basil"
+      "imageAlt": "Vegetarian pizza with roasted peppers, mushrooms, tomatoes, olives, onion, and basil",
+      "hasRecipe": true,
+      "recipeId": "sourdough-pizza"
     },
     {
       "id": "m28",
@@ -311,10 +314,13 @@ window.SVADOTSAVA_DATA_MENU = {
       "description": "Hand-stretched thin crust with tomato sauce, mozzarella, roasted tandoori chicken, red onion, bell pepper, coriander, and yogurt drizzle.",
       "badges": [
         "Non-Vegetarian",
-        "Contains Dairy"
+        "Contains Dairy",
+        "Recipe Guide Available"
       ],
       "image": "assets/images/menu/tandoori_chicken_pizza.webp",
-      "imageAlt": "Tandoori chicken pizza with mozzarella, onion, bell pepper, coriander, and yogurt drizzle"
+      "imageAlt": "Tandoori chicken pizza with mozzarella, onion, bell pepper, coriander, and yogurt drizzle",
+      "hasRecipe": true,
+      "recipeId": "sourdough-pizza"
     }
   ]
 };

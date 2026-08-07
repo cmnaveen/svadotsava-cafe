@@ -4,6 +4,8 @@
  * Symmetrical, fantasy-vector Canvas 2D visualization matching the wide-angle golden tree reference.
  * Features a wide sweeping arch canopy, twisted dark wood trunk with warm golden bioluminescent light streams,
  * vibrant green leaves, 5-petal pink cherry blossoms, and plump rose-red coffee cherries.
+ *
+ * Now rendered as an inline section with guestbook, impact counters, and recent leaves feed.
  */
 
 (() => {
@@ -19,15 +21,24 @@
     [0.44, 0.12], [0.56, 0.12], [0.08, 0.48], [0.92, 0.48]
   ];
 
+  /* Security: input sanitization for guestbook entries */
+  function sanitizeText(value, maxLength) {
+    return String(value || '')
+      .replace(/[<>]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, maxLength);
+  }
+
   document.addEventListener('DOMContentLoaded', initCommunityTree);
 
   function initCommunityTree() {
     const config = window.SVADOTSAVA_COMMUNITY_TREE || {};
-    const toggle = document.getElementById('community-tree-toggle');
-    const panel = document.getElementById('community-tree-panel');
-    const closeButton = document.getElementById('community-tree-close');
+    const section = document.getElementById('community-tree');
     const stage = document.getElementById('community-tree-stage');
     const canvas = document.getElementById('community-tree-canvas');
+    if (!canvas) return;
+    const context = canvas.getContext('2d');
     const tooltip = document.getElementById('community-tree-tooltip');
     const detail = document.getElementById('community-tree-detail');
     const searchForm = document.getElementById('community-tree-search-form');
@@ -35,16 +46,21 @@
     const searchClear = document.getElementById('community-tree-search-clear');
     const results = document.getElementById('community-tree-results');
 
-    if (!toggle || !panel || !stage || !canvas || !tooltip || !detail || !results) return;
+    /* Guestbook elements */
+    const guestbookForm = document.getElementById('guestbook-form');
+    const guestbookInput = document.getElementById('guestbook-message');
+    const guestbookName = document.getElementById('guestbook-name');
+    const guestbookList = document.getElementById('guestbook-feed-list');
 
-    const context = canvas.getContext('2d');
-    if (!context) return;
+    /* Floating toggle & Modal */
+    const toggle = document.getElementById('community-tree-toggle');
+    const closeButton = document.getElementById('community-tree-close');
+    const panel = document.getElementById('community-tree-panel') || document.getElementById('community-tree-modal') || document.getElementById('community-tree');
 
     const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
     const state = {
       isOpen: false,
-      width: 900,
-      height: 560,
       orders: [],
       hoveredId: null,
       selectedId: null,
@@ -66,7 +82,7 @@
 
     renderSearchResults();
 
-    toggle.addEventListener('click', () => {
+    toggle?.addEventListener('click', () => {
       if (state.isOpen) closePanel();
       else openPanel();
     });
@@ -144,13 +160,13 @@
     function openPanel() {
       if (state.isOpen) return;
       state.isOpen = true;
-      panel.hidden = false;
-      toggle.setAttribute('aria-expanded', 'true');
-      toggle.setAttribute('aria-label', 'Close Community Tree');
+      if (panel) panel.hidden = false;
+      toggle?.setAttribute('aria-expanded', 'true');
+      toggle?.setAttribute('aria-label', 'Close Community Tree');
       document.body.classList.add('community-tree-is-open');
 
       requestAnimationFrame(() => {
-        panel.classList.add('is-open');
+        panel?.classList.add('is-open');
         resizeCanvas();
         startAnimation();
       });
@@ -161,21 +177,21 @@
     function closePanel() {
       if (!state.isOpen) return;
       state.isOpen = false;
-      panel.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.removeAttribute('aria-label');
+      panel?.classList.remove('is-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+      toggle?.removeAttribute('aria-label');
       document.body.classList.remove('community-tree-is-open');
       hideTooltip();
       stopAnimation();
 
       window.setTimeout(() => {
-        if (!state.isOpen) panel.hidden = true;
+        if (!state.isOpen && panel) panel.hidden = true;
       }, state.reducedMotion ? 0 : 280);
-      toggle.focus();
+      toggle?.focus();
     }
 
     function resizeCanvas() {
-      if (!state.isOpen) return;
+      if (!state.isOpen || !context || !stage) return;
       const rect = stage.getBoundingClientRect();
       const width = Math.max(280, Math.floor(rect.width));
       const height = Math.max(290, Math.floor(rect.height));
@@ -1050,3 +1066,4 @@
     return hash >>> 0;
   }
 })();
+
