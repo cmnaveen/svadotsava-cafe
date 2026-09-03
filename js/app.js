@@ -585,10 +585,45 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (isValid) {
+        const selectedInterests = Array.from(
+          form.querySelectorAll('input[name="interests"]:checked')
+        ).map(cb => {
+          const label = cb.closest('label')?.textContent?.trim();
+          return label || cb.value;
+        });
+
+        const userName = nameInput.value.trim();
+        const userEmail = emailInput.value.trim();
+        const userCity = cityInput.value.trim();
+        const interestList = selectedInterests.length > 0 ? selectedInterests.join(', ') : 'All Café Offerings';
+
+        const emailSubject = encodeURIComponent(`Svādotsava Inner Circle — ${userName}`);
+        const emailBody = encodeURIComponent(
+`Hi Svādotsava Team,
+
+I would love to join the Inner Circle opening guest-list for your Summer 2029 café opening!
+
+• Full Name: ${userName}
+• Email: ${userEmail}
+• Area / City: ${userCity}
+• Interested In: ${interestList}
+
+Looking forward to hearing your updates and opening announcements.
+
+Warm regards,
+${userName}`
+        );
+
+        const mailtoUrl = `mailto:${DATA.business.email}?subject=${emailSubject}&body=${emailBody}`;
+
         showModal(
-          "Your request is ready",
-          `Thank you, ${nameInput.value.trim()}! This GitHub Pages preview does not save submissions yet. Please email ${DATA.business.email} to join the opening list.`,
-          "✉️"
+          "Your Invitation Request is Ready",
+          `Thank you, ${userName}! We have prepared your opening guest-list request for ${userCity}. Click "Send Email Now" below to send your pre-filled request directly to ${DATA.business.email}.`,
+          "✨",
+          {
+            text: "✉️ Send Email Now",
+            url: mailtoUrl
+          }
         );
       }
     });
@@ -724,20 +759,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
   }
 
-  function showModal(title, desc, icon = '✨') {
+  function showModal(title, desc, icon = '✨', action = null) {
     const overlay = document.getElementById('modal-overlay');
     const modalTitle = document.getElementById('modal-title');
     const modalDesc = document.getElementById('modal-desc');
     const modalIcon = document.getElementById('modal-icon');
     const closeBtn = document.getElementById('modal-close-btn');
+    const actionBtn = document.getElementById('modal-action-btn');
 
     if (modalTitle) modalTitle.textContent = title;
     if (modalDesc) modalDesc.textContent = desc;
     if (modalIcon) modalIcon.textContent = icon;
-
-    modalReturnFocus = document.activeElement;
-    overlay?.classList.add('open');
-    closeBtn?.focus();
 
     const closeModal = () => {
       overlay?.classList.remove('open');
@@ -746,6 +778,36 @@ document.addEventListener('DOMContentLoaded', () => {
       modalReturnFocus = null;
       modalKeydownHandler = null;
     };
+
+    if (action && action.text && action.url && actionBtn) {
+      actionBtn.textContent = action.text;
+      actionBtn.href = action.url;
+      actionBtn.style.display = 'inline-flex';
+      actionBtn.onclick = () => {
+        showToast("Opening your email app...");
+        setTimeout(closeModal, 400);
+      };
+      if (closeBtn) {
+        closeBtn.className = 'btn btn-secondary';
+        closeBtn.textContent = 'Close';
+      }
+    } else if (actionBtn) {
+      actionBtn.style.display = 'none';
+      actionBtn.onclick = null;
+      if (closeBtn) {
+        closeBtn.className = 'btn btn-primary';
+        closeBtn.textContent = 'Understand';
+      }
+    }
+
+    modalReturnFocus = document.activeElement;
+    overlay?.classList.add('open');
+
+    if (action && actionBtn) {
+      actionBtn.focus();
+    } else {
+      closeBtn?.focus();
+    }
 
     if (modalKeydownHandler) document.removeEventListener('keydown', modalKeydownHandler);
     modalKeydownHandler = (e) => {
