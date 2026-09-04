@@ -1,44 +1,49 @@
 /**
  * Svādotsava - Interactive Community Digital Tree
  * ------------------------------------------------------------------
- * Symmetrical, fantasy-vector Canvas 2D visualization matching the wide-angle golden tree reference.
- * Features a wide sweeping arch canopy, twisted dark wood trunk with warm golden bioluminescent light streams,
- * vibrant green leaves, 5-petal pink cherry blossoms, and plump rose-red coffee cherries.
+ * Painted botanical community tree inspired by traditional botanical illustration.
+ * Features a textured wooden trunk, organic root mound, and painted order tiers:
+ *   🍃 Leaf (Below ₹500)
+ *   🌸 Blossom (₹500–₹1,000)
+ *   🍒 Cherry (Above ₹1,000)
  *
- * Now rendered as an inline section with guestbook, impact counters, and recent leaves feed.
+ * Interactive on-tree name badges, targeted tier glowing auras, search filtering,
+ * and accessible keyboard navigation.
  */
 
 (() => {
   'use strict';
 
-  const SLOT_COORDINATES = [
-    [0.22, 0.30], [0.36, 0.18], [0.50, 0.12], [0.64, 0.18],
-    [0.78, 0.30], [0.12, 0.42], [0.30, 0.38], [0.70, 0.38],
-    [0.88, 0.42], [0.44, 0.26], [0.24, 0.52], [0.76, 0.52],
-    [0.56, 0.26], [0.10, 0.28], [0.90, 0.28], [0.32, 0.22],
-    [0.68, 0.22], [0.50, 0.38], [0.18, 0.36], [0.82, 0.36],
-    [0.38, 0.46], [0.62, 0.46], [0.18, 0.20], [0.82, 0.20],
-    [0.44, 0.12], [0.56, 0.12], [0.08, 0.48], [0.92, 0.48]
+  /* Specific slot coordinates mapped to painted leaves, blossoms, and cherries */
+  const LEAF_COORDINATES = [
+    [0.16, 0.18], [0.945, 0.30], [0.035, 0.47], [0.965, 0.49],
+    [0.525, 0.065], [0.365, 0.74], [0.635, 0.77], [0.84, 0.18],
+    [0.05, 0.34], [0.95, 0.50], [0.18, 0.55], [0.82, 0.55]
   ];
 
-  /* Security: input sanitization for guestbook entries */
-  function sanitizeText(value, maxLength) {
-    return String(value || '')
-      .replace(/[<>]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim()
-      .slice(0, maxLength);
-  }
+  const BLOSSOM_COORDINATES = [
+    [0.375, 0.125], [0.64, 0.125], [0.21, 0.23], [0.83, 0.235],
+    [0.50, 0.21], [0.21, 0.375], [0.735, 0.505], [0.68, 0.14],
+    [0.12, 0.28], [0.34, 0.33], [0.08, 0.49], [0.13, 0.59]
+  ];
+
+  const CHERRY_COORDINATES = [
+    [0.39, 0.185], [0.68, 0.215], [0.298, 0.24], [0.778, 0.32],
+    [0.922, 0.38], [0.545, 0.488], [0.22, 0.29], [0.08, 0.36],
+    [0.14, 0.45], [0.09, 0.54], [0.12, 0.68], [0.26, 0.60]
+  ];
 
   document.addEventListener('DOMContentLoaded', initCommunityTree);
 
   function initCommunityTree() {
     const config = window.SVADOTSAVA_COMMUNITY_TREE || {};
-    const section = document.getElementById('community-tree');
     const stage = document.getElementById('community-tree-stage');
     const canvas = document.getElementById('community-tree-canvas');
-    if (!canvas) return;
+    if (!canvas || !stage) return;
+
     const context = canvas.getContext('2d');
+    if (!context) return;
+
     const tooltip = document.getElementById('community-tree-tooltip');
     const detail = document.getElementById('community-tree-detail');
     const searchForm = document.getElementById('community-tree-search-form');
@@ -46,13 +51,7 @@
     const searchClear = document.getElementById('community-tree-search-clear');
     const results = document.getElementById('community-tree-results');
 
-    /* Guestbook elements */
-    const guestbookForm = document.getElementById('guestbook-form');
-    const guestbookInput = document.getElementById('guestbook-message');
-    const guestbookName = document.getElementById('guestbook-name');
-    const guestbookList = document.getElementById('guestbook-feed-list');
-
-    /* Floating toggle & Modal */
+    /* Floating toggle & Modal panel */
     const toggle = document.getElementById('community-tree-toggle');
     const closeButton = document.getElementById('community-tree-close');
     const panel = document.getElementById('community-tree-panel') || document.getElementById('community-tree-modal') || document.getElementById('community-tree');
@@ -61,6 +60,8 @@
 
     const state = {
       isOpen: false,
+      width: 900,
+      height: 560,
       orders: [],
       hoveredId: null,
       selectedId: null,
@@ -70,8 +71,22 @@
       reducedMotion: reducedMotionQuery.matches,
       resizeObserver: null,
       pollTimer: null,
-      sparkles: createSparkleParticles(65),
-      foliageClusters: generateFoliageClusters()
+      treeImage: new Image(),
+      treeImageLoaded: false,
+      treeBounds: { x: 0, y: 0, width: 900, height: 560 },
+      sparkles: createSparkleParticles(45)
+    };
+
+    /* Load painted botanical tree asset */
+    state.treeImage.src = 'assets/images/brand/community_tree_painted.webp';
+    state.treeImage.onload = () => {
+      state.treeImageLoaded = true;
+      requestDraw();
+    };
+    state.treeImage.onerror = () => {
+      if (!state.treeImage.src.endsWith('.png')) {
+        state.treeImage.src = 'assets/images/brand/community_tree_painted.png';
+      }
     };
 
     const seededOrders = Array.isArray(config.orders) ? config.orders : [];
@@ -191,7 +206,7 @@
     }
 
     function resizeCanvas() {
-      if (!state.isOpen || !context || !stage) return;
+      if (!state.isOpen) return;
       const rect = stage.getBoundingClientRect();
       const width = Math.max(280, Math.floor(rect.width));
       const height = Math.max(290, Math.floor(rect.height));
@@ -233,23 +248,38 @@
       });
     }
 
-    function generateFoliageClusters() {
-      const clusters = [];
-      const count = 200;
+    function createSparkleParticles(count) {
+      const particles = [];
       for (let i = 0; i < count; i += 1) {
-        const angle = Math.random() * Math.PI * 2;
-        const dist = 0.05 + Math.sqrt(Math.random()) * 0.38;
-        const xRel = 0.50 + Math.cos(angle) * dist * 1.15;
-        const yRel = 0.34 + Math.sin(angle) * dist * 0.68;
-        clusters.push({
-          x: xRel,
-          y: yRel,
-          angle: angle + (Math.random() - 0.5) * 1.3,
-          scale: 0.65 + Math.random() * 0.55,
-          colorType: i % 4
+        particles.push({
+          xRel: 0.06 + Math.random() * 0.88,
+          yRel: 0.06 + Math.random() * 0.84,
+          speed: 0.04 + Math.random() * 0.10,
+          size: 0.8 + Math.random() * 1.6,
+          phase: Math.random() * Math.PI * 2,
+          colorType: i % 3
         });
       }
-      return clusters;
+      return particles;
+    }
+
+    function getTreeBounds(width, height) {
+      const naturalAspect = 1.0; // 1:1 square painted botanical tree
+      const stageAspect = width / height;
+      let drawW, drawH, drawX, drawY;
+
+      if (stageAspect > naturalAspect) {
+        drawH = height;
+        drawW = height * naturalAspect;
+        drawX = (width - drawW) / 2;
+        drawY = 0;
+      } else {
+        drawW = width;
+        drawH = width / naturalAspect;
+        drawX = 0;
+        drawY = (height - drawH) / 2;
+      }
+      return { x: drawX, y: drawY, width: drawW, height: drawH };
     }
 
     function drawTree(time) {
@@ -260,47 +290,105 @@
 
       const seconds = time / 1000;
 
-      // 1. Dark charcoal presentation background & soft warm golden central glow
-      drawAtmosphere(width, height, seconds);
+      // 1. Stage fill
+      context.fillStyle = '#111318';
+      context.fillRect(0, 0, width, height);
 
-      // 2. Base canopy background silhouette glow
-      drawCanopyAura(width, height);
+      // 2. Render painted tree artwork
+      state.treeBounds = getTreeBounds(width, height);
+      const bounds = state.treeBounds;
 
-      // 3. Flared root network with warm golden bioluminescent streams
-      drawRoots(width, height, seconds);
+      if (state.treeImageLoaded) {
+        context.drawImage(state.treeImage, bounds.x, bounds.y, bounds.width, bounds.height);
 
-      // 4. Twisted dark chocolate wood trunk with warm golden light streams
-      drawTrunk(width, height, seconds);
+        // Soft perimeter vignette to blend tree naturally with stage background
+        const vignette = context.createRadialGradient(
+          width * 0.5, height * 0.5, Math.min(width, height) * 0.38,
+          width * 0.5, height * 0.5, Math.max(width, height) * 0.68
+        );
+        vignette.addColorStop(0, 'rgba(17, 19, 24, 0)');
+        vignette.addColorStop(0.75, 'rgba(17, 19, 24, 0.20)');
+        vignette.addColorStop(1, 'rgba(17, 19, 24, 0.90)');
+        context.fillStyle = vignette;
+        context.fillRect(0, 0, width, height);
 
-      // 5. Wide sweeping branch arches forming horizontal canopy dome
-      drawBranches(width, height, seconds);
+        // Warm ambient sunbeam through crown canopy
+        const sunbeam = context.createRadialGradient(
+          width * 0.5, bounds.y + bounds.height * 0.24, 20,
+          width * 0.5, bounds.y + bounds.height * 0.35, bounds.width * 0.45
+        );
+        sunbeam.addColorStop(0, 'rgba(255, 220, 140, 0.10)');
+        sunbeam.addColorStop(0.6, 'rgba(255, 190, 80, 0.03)');
+        sunbeam.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        context.fillStyle = sunbeam;
+        context.fillRect(0, 0, width, height);
+      } else {
+        // Warm golden radial glow while asset loads
+        const aura = context.createRadialGradient(width * 0.5, height * 0.42, 10, width * 0.5, height * 0.42, width * 0.38);
+        aura.addColorStop(0, 'rgba(255, 215, 0, 0.20)');
+        aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        context.fillStyle = aura;
+        context.fillRect(0, 0, width, height);
+      }
 
-      // 6. Lush dense canopy leaf clusters covering the wide arch
-      drawLushCanopy(width, height, seconds);
+      // 3. Floating dappled sunlight & golden pollen motes
+      context.save();
+      context.globalCompositeOperation = 'screen';
+      state.sparkles.forEach((p) => {
+        const floatY = state.reducedMotion ? 0 : Math.sin(seconds * p.speed * 1.5 + p.phase) * 9;
+        const floatX = state.reducedMotion ? 0 : Math.cos(seconds * p.speed * 1.2 + p.phase) * 6;
+        const px = width * p.xRel + floatX;
+        const py = height * p.yRel + floatY;
 
-      // 7. Interactive Community Elements (leaves, cherry blossoms, coffee cherries)
+        const twinkle = state.reducedMotion ? 0.6 : 0.25 + (Math.sin(seconds * 2.2 + p.phase) + 1) * 0.35;
+        let colorStr = `rgba(255, 225, 120, ${twinkle * 0.75})`;
+        if (p.colorType === 1) colorStr = `rgba(255, 185, 70, ${twinkle * 0.65})`;
+        else if (p.colorType === 2) colorStr = `rgba(255, 245, 190, ${twinkle * 0.85})`;
+
+        context.shadowColor = '#f59e0b';
+        context.shadowBlur = 4 + p.size * 2;
+        context.fillStyle = colorStr;
+        context.beginPath();
+        context.arc(px, py, p.size, 0, Math.PI * 2);
+        context.fill();
+      });
+      context.restore();
+
+      // 4. Interactive community botanical elements (Leaves, Blossoms, Cherries)
+      const searchedOrders = [];
+      const interactiveOrders = [];
+
       state.orders.forEach((order, index) => {
         const phase = hashString(order.id) * 0.0001;
-        const swayX = state.reducedMotion ? 0 : Math.sin(seconds * 0.7 + phase) * (1.8 + (index % 3) * 0.35);
-        const swayY = state.reducedMotion ? 0 : Math.cos(seconds * 0.55 + phase) * 0.9;
-        const x = order.x * width + swayX;
-        const y = order.y * height + swayY;
+        const swayX = state.reducedMotion ? 0 : Math.sin(seconds * 0.85 + phase) * 0.8;
+        const swayY = state.reducedMotion ? 0 : Math.cos(seconds * 0.65 + phase) * 0.5;
+        const x = bounds.x + order.x * bounds.width + swayX;
+        const y = bounds.y + order.y * bounds.height + swayY;
         const interactive = order.id === state.hoveredId || order.id === state.selectedId;
         const searched = Boolean(state.searchQuery && order.displayName.toLocaleLowerCase().includes(state.searchQuery));
-        const growth = getGrowthScale(order, time);
-        const scale = growth * (interactive ? 1.35 : searched ? 1.22 : 1);
 
         order.screenX = x;
         order.screenY = y;
-        order.hitRadius = 26 * Math.max(scale, 0.75);
+        order.hitRadius = 24;
 
-        // Highlight ring if selected or searched
-        if (searched || order.id === state.selectedId) {
-          drawHighlight(x, y, order.type, darkMode, time);
+        // Draw interactive highlight aura when searched, hovered, or selected
+        if (searched || interactive) {
+          drawOrderHighlight(x, y, order.type, darkMode, time, interactive);
+        } else {
+          // Subtle idle indicator ring so users know where orders are planted
+          drawIdleIndicator(x, y, order.type, time, index);
         }
 
-        // Render Community Element
-        drawTreeElement(order, x, y, scale, darkMode);
+        if (interactive) interactiveOrders.push(order);
+        else if (searched) searchedOrders.push(order);
+      });
+
+      // 5. Render on-tree customer name badges (searched & hovered/selected)
+      searchedOrders.slice(0, 6).forEach((order) => {
+        drawLeafNameTag(order.screenX, order.screenY, order, false);
+      });
+      interactiveOrders.forEach((order) => {
+        drawLeafNameTag(order.screenX, order.screenY, order, true);
       });
 
       if (state.hoveredId || state.selectedId) {
@@ -308,507 +396,123 @@
       }
     }
 
-    function createSparkleParticles(count) {
-      const particles = [];
-      for (let i = 0; i < count; i += 1) {
-        particles.push({
-          xRel: 0.05 + Math.random() * 0.90,
-          yRel: 0.12 + Math.random() * 0.78,
-          speed: 0.05 + Math.random() * 0.12,
-          size: 0.8 + Math.random() * 1.6,
-          phase: Math.random() * Math.PI * 2,
-          colorType: i % 3
-        });
-      }
-      return particles;
-    }
-
-    function drawAtmosphere(width, height, seconds) {
-      // Dark Charcoal Background Gradient
-      const bgGrad = context.createLinearGradient(0, 0, 0, height);
-      bgGrad.addColorStop(0, '#131417');
-      bgGrad.addColorStop(0.5, '#1a1b1f');
-      bgGrad.addColorStop(1, '#101113');
-      context.fillStyle = bgGrad;
-      context.fillRect(0, 0, width, height);
-
-      // Central Warm Golden Radial Glow Behind Canopy Dome
-      const centerX = width * 0.50;
-      const centerY = height * 0.38;
-      const aura = context.createRadialGradient(centerX, centerY, width * 0.02, centerX, centerY, width * 0.48);
-      aura.addColorStop(0, 'rgba(255, 200, 80, 0.16)');
-      aura.addColorStop(0.38, 'rgba(255, 170, 40, 0.08)');
-      aura.addColorStop(0.75, 'rgba(100, 255, 180, 0.03)');
-      aura.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      context.fillStyle = aura;
-      context.fillRect(0, 0, width, height);
-
-      // Outer Vignette
-      const vignette = context.createRadialGradient(centerX, height * 0.5, width * 0.28, centerX, height * 0.5, width * 0.70);
-      vignette.addColorStop(0, 'rgba(0,0,0,0)');
-      vignette.addColorStop(1, 'rgba(0,0,0,0.68)');
-      context.fillStyle = vignette;
-      context.fillRect(0, 0, width, height);
-
-      // Ground Shadow Base with Warm Golden Stardust Particles
-      const groundY = height * 0.90;
-      context.beginPath();
-      context.ellipse(centerX, groundY + 4, width * 0.36, height * 0.04, 0, 0, Math.PI * 2);
-      context.fillStyle = 'rgba(0, 0, 0, 0.65)';
-      context.fill();
-
-      // Floating Golden Sparkle Particles along the ground line and canopy
-      context.save();
-      context.globalCompositeOperation = 'screen';
-      state.sparkles.forEach((p) => {
-        const floatY = state.reducedMotion ? 0 : Math.sin(seconds * p.speed * 1.5 + p.phase) * 8;
-        const floatX = state.reducedMotion ? 0 : Math.cos(seconds * p.speed * 1.2 + p.phase) * 6;
-        const px = width * p.xRel + floatX;
-        const py = height * p.yRel + floatY;
-
-        const twinkle = state.reducedMotion ? 0.6 : 0.25 + (Math.sin(seconds * 2.2 + p.phase) + 1) * 0.35;
-        let colorStr = `rgba(255, 215, 0, ${twinkle})`;
-        if (p.colorType === 1) colorStr = `rgba(255, 170, 50, ${twinkle * 0.9})`;
-        else if (p.colorType === 2) colorStr = `rgba(255, 235, 140, ${twinkle})`;
-
-        context.shadowColor = p.colorType === 1 ? '#ff9900' : '#ffd700';
-        context.shadowBlur = 6 + p.size * 2;
-        context.fillStyle = colorStr;
-        context.beginPath();
-        context.arc(px, py, p.size, 0, Math.PI * 2);
-        context.fill();
-      });
-      context.restore();
-    }
-
-    function drawCanopyAura(width, height) {
-      const centerX = width * 0.50;
-      const centerY = height * 0.34;
-      const canopyGlow = context.createRadialGradient(centerX, centerY, width * 0.05, centerX, centerY, width * 0.44);
-      canopyGlow.addColorStop(0, 'rgba(57, 255, 20, 0.14)');
-      canopyGlow.addColorStop(0.60, 'rgba(16, 185, 129, 0.07)');
-      canopyGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-      context.fillStyle = canopyGlow;
-      context.beginPath();
-      context.ellipse(centerX, centerY, width * 0.44, height * 0.28, 0, 0, Math.PI * 2);
-      context.fill();
-    }
-
-    function drawRoots(width, height, seconds) {
-      const rootList = [
-        // Symmetrical wide-angle left roots
-        [[0.46, 0.85], [0.36, 0.90], [0.22, 0.93], [0.06, 0.93], 10, '#ffd700'],
-        [[0.48, 0.87], [0.40, 0.92], [0.30, 0.95], [0.18, 0.96], 7, '#ff9900'],
-        [[0.49, 0.88], [0.44, 0.93], [0.38, 0.96], [0.30, 0.97], 5, '#ffe484'],
-        // Symmetrical wide-angle right roots
-        [[0.54, 0.85], [0.64, 0.90], [0.78, 0.93], [0.94, 0.93], 10, '#ffd700'],
-        [[0.52, 0.87], [0.60, 0.92], [0.70, 0.95], [0.82, 0.96], 7, '#ff9900'],
-        [[0.51, 0.88], [0.56, 0.93], [0.62, 0.96], [0.70, 0.97], 5, '#ffe484']
-      ];
-
-      context.save();
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
-
-      rootList.forEach(([start, cA, cB, end, w, glowColor]) => {
-        // Warm golden bioluminescent glow
-        context.shadowColor = glowColor;
-        context.shadowBlur = 12;
-        context.beginPath();
-        context.moveTo(width * start[0], height * start[1]);
-        context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.strokeStyle = 'rgba(255, 200, 80, 0.40)';
-        context.lineWidth = w + 4;
-        context.stroke();
-        context.shadowBlur = 0;
-
-        // Dark Chocolate Wood Core
-        context.beginPath();
-        context.moveTo(width * start[0], height * start[1]);
-        context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.strokeStyle = '#241913';
-        context.lineWidth = w;
-        context.stroke();
-
-        // Bright Golden Core Light Thread
-        context.beginPath();
-        context.moveTo(width * start[0], height * start[1]);
-        context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.strokeStyle = 'rgba(255, 235, 140, 0.90)';
-        context.lineWidth = Math.max(1, w * 0.24);
-        context.stroke();
-      });
-
-      context.restore();
-    }
-
-    function drawTrunk(width, height, seconds) {
+    function drawIdleIndicator(x, y, type, time, index) {
+      // Subtle organic breathing dot over the element
+      const pulse = state.reducedMotion ? 0 : Math.sin(time / 600 + index) * 1.5;
+      const radius = 6 + pulse;
       context.save();
 
-      // Rich Twisted Chocolate Wood Bark Fill
-      const trunkGrad = context.createLinearGradient(width * 0.38, 0, width * 0.62, 0);
-      trunkGrad.addColorStop(0, '#1c130e');
-      trunkGrad.addColorStop(0.20, '#382417');
-      trunkGrad.addColorStop(0.50, '#5e3f28');
-      trunkGrad.addColorStop(0.80, '#382417');
-      trunkGrad.addColorStop(1, '#1c130e');
-
-      // Trunk Body with Warm Golden Glow
-      context.shadowColor = '#ffd700';
-      context.shadowBlur = 16;
+      let color = 'rgba(74, 222, 128, 0.55)'; // leaf green
+      if (type === 'flower') color = 'rgba(254, 240, 138, 0.65)'; // blossom cream
+      else if (type === 'fruit') color = 'rgba(244, 63, 94, 0.65)'; // cherry ruby
 
       context.beginPath();
-      context.moveTo(width * 0.42, height * 0.88);
-      context.bezierCurveTo(width * 0.45, height * 0.78, width * 0.465, height * 0.66, width * 0.475, height * 0.55);
-      context.bezierCurveTo(width * 0.485, height * 0.38, width * 0.49, height * 0.24, width * 0.50, height * 0.10);
-      context.bezierCurveTo(width * 0.51, height * 0.24, width * 0.515, height * 0.38, width * 0.525, height * 0.55);
-      context.bezierCurveTo(width * 0.535, height * 0.66, width * 0.55, height * 0.78, width * 0.58, height * 0.88);
-      context.bezierCurveTo(width * 0.53, height * 0.865, width * 0.47, height * 0.865, width * 0.42, height * 0.88);
-      context.closePath();
-      context.fillStyle = trunkGrad;
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.fillStyle = color;
+      context.shadowColor = color;
+      context.shadowBlur = 6;
       context.fill();
 
-      // Warm Golden Rim Strokes along Bark Silhouette
-      context.strokeStyle = 'rgba(255, 215, 0, 0.75)';
-      context.lineWidth = 2.0;
-      context.stroke();
-      context.shadowBlur = 0;
-
-      // Twisted Wood Tendons & Golden Energy Streams
-      const trunkVeins = [
-        [[0.455, 0.85], [0.475, 0.70], [0.48, 0.55], [0.49, 0.30]],
-        [[0.50, 0.87], [0.50, 0.68], [0.50, 0.50], [0.50, 0.14]],
-        [[0.545, 0.85], [0.525, 0.70], [0.52, 0.55], [0.51, 0.30]]
-      ];
-
-      trunkVeins.forEach(([start, cA, cB, end]) => {
-        context.beginPath();
-        context.moveTo(width * start[0], height * start[1]);
-        context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-        context.shadowColor = '#ffd700';
-        context.shadowBlur = 9;
-        context.strokeStyle = 'rgba(255, 235, 140, 0.85)';
-        context.lineWidth = 1.8;
-        context.stroke();
-      });
+      context.beginPath();
+      context.arc(x, y, 2, 0, Math.PI * 2);
+      context.fillStyle = '#ffffff';
+      context.fill();
 
       context.restore();
     }
 
-    function drawBranches(width, height, seconds) {
-      // Wide-Angle Symmetrical Radial Branching Architecture
-      const branchPairs = [
-        // Wide Outer Horizontal Sweep (Left & Right)
-        [[0.50, 0.55], [0.35, 0.48], [0.20, 0.42], [0.06, 0.38], 12, '#ffd700'],
-        [[0.50, 0.55], [0.65, 0.48], [0.80, 0.42], [0.94, 0.38], 12, '#ffd700'],
-
-        // Mid-Upper Arch Sweep (Left & Right)
-        [[0.50, 0.52], [0.38, 0.34], [0.24, 0.22], [0.10, 0.18], 9.5, '#ffaa00'],
-        [[0.50, 0.52], [0.62, 0.34], [0.76, 0.22], [0.90, 0.18], 9.5, '#ffaa00'],
-
-        // Inner Top Crown Leader (Left & Right)
-        [[0.50, 0.45], [0.46, 0.28], [0.42, 0.16], [0.36, 0.08], 7.5, '#ffe484'],
-        [[0.50, 0.45], [0.54, 0.28], [0.58, 0.16], [0.64, 0.08], 7.5, '#ffe484'],
-        [[0.50, 0.35], [0.50, 0.20], [0.50, 0.12], [0.50, 0.06], 7.0, '#ffd700'],
-
-        // Mid-Lower Arch Branches (Left & Right)
-        [[0.50, 0.58], [0.34, 0.54], [0.22, 0.50], [0.08, 0.46], 8.5, '#ffd700'],
-        [[0.50, 0.58], [0.66, 0.54], [0.78, 0.50], [0.92, 0.46], 8.5, '#ffd700'],
-
-        // Secondary Twigs filling canopy arch
-        [[0.35, 0.48], [0.26, 0.42], [0.18, 0.36], [0.10, 0.34], 5.5, '#ffaa00'],
-        [[0.65, 0.48], [0.74, 0.42], [0.82, 0.36], [0.90, 0.34], 5.5, '#ffaa00'],
-
-        [[0.38, 0.34], [0.30, 0.28], [0.22, 0.24], [0.14, 0.24], 5.0, '#ffe484'],
-        [[0.62, 0.34], [0.70, 0.28], [0.78, 0.24], [0.86, 0.24], 5.0, '#ffe484']
-      ];
+    function drawOrderHighlight(x, y, type, darkMode, time, isPrimary) {
+      const baseRadius = type === 'fruit' ? 22 : type === 'flower' ? 20 : 18;
+      const pulse = state.reducedMotion ? 0 : Math.sin(time / 200) * 3;
 
       context.save();
-      context.lineCap = 'round';
-      context.lineJoin = 'round';
+      let glowColor = '#ffd700';
+      if (type === 'leaf') glowColor = '#4ade80';
+      else if (type === 'flower') glowColor = '#fef08a';
+      else if (type === 'fruit') glowColor = '#fb7185';
 
-      branchPairs.forEach(([start, cA, cB, end, w, glowColor]) => {
-        drawGlowBranch(width, height, start, cA, cB, end, w, glowColor);
-      });
-
-      context.restore();
-    }
-
-    function drawGlowBranch(width, height, start, cA, cB, end, lineWidth, glowColor) {
-      const trace = () => {
-        context.beginPath();
-        context.moveTo(width * start[0], height * start[1]);
-        context.bezierCurveTo(width * cA[0], height * cA[1], width * cB[0], height * cB[1], width * end[0], height * end[1]);
-      };
-
-      // Warm Golden Glow Pass
-      context.save();
       context.shadowColor = glowColor;
-      context.shadowBlur = 11;
-      trace();
-      context.strokeStyle = 'rgba(255, 200, 80, 0.30)';
-      context.lineWidth = lineWidth + 4;
-      context.stroke();
-      context.shadowBlur = 0;
+      context.shadowBlur = isPrimary ? 22 : 14;
 
-      // Dark Chocolate Wood Core
-      const branchGrad = context.createLinearGradient(width * start[0], height * start[1], width * end[0], height * end[1]);
-      branchGrad.addColorStop(0, '#54371f');
-      branchGrad.addColorStop(0.5, '#78502d');
-      branchGrad.addColorStop(1, '#332013');
-      trace();
-      context.strokeStyle = branchGrad;
-      context.lineWidth = lineWidth;
-      context.stroke();
-
-      // Bright Golden Core Light Stream
-      trace();
-      context.strokeStyle = 'rgba(255, 235, 140, 0.85)';
-      context.lineWidth = Math.max(0.8, lineWidth * 0.20);
-      context.stroke();
-      context.restore();
-    }
-
-    function drawLushCanopy(width, height, seconds) {
-      context.save();
-
-      state.foliageClusters.forEach((c, idx) => {
-        const sway = state.reducedMotion ? 0 : Math.sin(seconds * 0.65 + idx) * 1.2;
-        const x = c.x * width + sway;
-        const y = c.y * height;
-
-        context.save();
-        context.translate(x, y);
-        context.rotate(c.angle);
-        context.scale(c.scale, c.scale);
-
-        context.shadowColor = '#76ff03';
-        context.shadowBlur = 7;
-
-        const leafGrad = context.createLinearGradient(-14, -9, 14, 9);
-        if (c.colorType === 0) {
-          leafGrad.addColorStop(0, '#2d8a4e');
-          leafGrad.addColorStop(0.5, '#165b30');
-          leafGrad.addColorStop(1, '#0b3d1f');
-        } else if (c.colorType === 1) {
-          leafGrad.addColorStop(0, '#46cb74');
-          leafGrad.addColorStop(0.5, '#229e50');
-          leafGrad.addColorStop(1, '#0e6430');
-        } else if (c.colorType === 2) {
-          leafGrad.addColorStop(0, '#8eff54');
-          leafGrad.addColorStop(0.5, '#34d468');
-          leafGrad.addColorStop(1, '#158c40');
-        } else {
-          leafGrad.addColorStop(0, '#d4ff42');
-          leafGrad.addColorStop(0.5, '#76ff03');
-          leafGrad.addColorStop(1, '#10b981');
-        }
-
-        context.beginPath();
-        context.moveTo(-14, 0);
-        context.bezierCurveTo(-8, -12, 8, -13, 15, -1);
-        context.bezierCurveTo(8, 11, -8, 12, -14, 0);
-        context.fillStyle = leafGrad;
-        context.fill();
-
-        context.strokeStyle = 'rgba(230, 255, 200, 0.60)';
-        context.lineWidth = 0.75;
-        context.stroke();
-
-        context.restore();
-      });
-
-      context.restore();
-    }
-
-    function drawTreeElement(order, x, y, scale, darkMode) {
-      context.save();
-      context.translate(x, y);
-      context.scale(scale, scale);
-      const tilt = ((hashString(order.id) % 25) - 12) * Math.PI / 180;
-      context.rotate(tilt);
-
-      if (order.type === 'leaf') drawLeaf();
-      else if (order.type === 'flower') drawFlower();
-      else drawFruit();
-
-      context.restore();
-    }
-
-    function drawLeaf() {
-      // Bright neon-green leaf matching reference image
-      context.save();
-      context.shadowColor = '#76ff03';
-      context.shadowBlur = 15;
-
-      const leafGrad = context.createLinearGradient(-18, -12, 18, 12);
-      leafGrad.addColorStop(0, '#d4ff42');
-      leafGrad.addColorStop(0.40, '#76ff03');
-      leafGrad.addColorStop(0.80, '#10b981');
-      leafGrad.addColorStop(1, '#036937');
-
-      context.beginPath();
-      context.moveTo(-18, 1);
-      context.bezierCurveTo(-11, -16, 11, -17, 19, -2);
-      context.bezierCurveTo(11, 15, -10, 16, -18, 1);
-      context.fillStyle = leafGrad;
-      context.fill();
-
-      context.strokeStyle = '#f0ffc2';
-      context.lineWidth = 1.2;
-      context.stroke();
-
-      context.shadowBlur = 0;
-      context.beginPath();
-      context.moveTo(-13, 2);
-      context.quadraticCurveTo(0, -1, 14, -3);
-      context.strokeStyle = 'rgba(245, 255, 240, 0.9)';
-      context.lineWidth = 1.2;
-      context.stroke();
-
-      for (let i = -8; i <= 8; i += 5) {
-        context.beginPath();
-        context.moveTo(i, 0);
-        context.lineTo(i + 3, -4);
-        context.strokeStyle = 'rgba(220, 255, 210, 0.5)';
-        context.lineWidth = 0.8;
-        context.stroke();
-      }
-
-      context.restore();
-    }
-
-    function drawFlower() {
-      // Glowing 5-petal pink cherry blossom matching reference image
-      context.save();
-      context.shadowColor = '#ff80bf';
-      context.shadowBlur = 18;
-
-      for (let i = 0; i < 5; i += 1) {
-        const angle = -Math.PI / 2 + (Math.PI * 2 * i) / 5;
-        const petalGrad = context.createRadialGradient(
-          Math.cos(angle) * 4, Math.sin(angle) * 4, 1,
-          Math.cos(angle) * 11, Math.sin(angle) * 11, 14
-        );
-        petalGrad.addColorStop(0, '#ffeef7');
-        petalGrad.addColorStop(0.42, '#ff80bf');
-        petalGrad.addColorStop(0.80, '#ff3399');
-        petalGrad.addColorStop(1, '#b8005c');
-
-        context.beginPath();
-        context.ellipse(Math.cos(angle) * 11, Math.sin(angle) * 11, 9, 14, angle, 0, Math.PI * 2);
-        context.fillStyle = petalGrad;
-        context.fill();
-        context.strokeStyle = 'rgba(255, 240, 250, 0.85)';
-        context.lineWidth = 0.9;
-        context.stroke();
-      }
-
-      const centerGrad = context.createRadialGradient(-2, -2, 1, 0, 0, 8);
-      centerGrad.addColorStop(0, '#ffe054');
-      centerGrad.addColorStop(0.6, '#f57c00');
-      centerGrad.addColorStop(1, '#e65100');
-
-      context.beginPath();
-      context.arc(0, 0, 7.5, 0, Math.PI * 2);
-      context.fillStyle = centerGrad;
-      context.fill();
-
-      context.fillStyle = '#fffde7';
-      for (let i = 0; i < 5; i += 1) {
-        const a = (Math.PI * 2 * i) / 5;
-        context.beginPath();
-        context.arc(Math.cos(a) * 4.2, Math.sin(a) * 4.2, 1.2, 0, Math.PI * 2);
-        context.fill();
-      }
-
-      context.restore();
-    }
-
-    function drawFruit() {
-      // Oval rose-red coffee cherry matching reference image
-      context.save();
-      context.shadowColor = '#e6194b';
-      context.shadowBlur = 18;
-
-      context.beginPath();
-      context.moveTo(0, -14);
-      context.lineTo(0, -3);
-      context.strokeStyle = '#76ff03';
-      context.lineWidth = 2.0;
-      context.lineCap = 'round';
-      context.stroke();
-
-      const fruitGrad = context.createRadialGradient(-4, -5, 1, 1, 3, 18);
-      fruitGrad.addColorStop(0, '#ffe5ea');
-      fruitGrad.addColorStop(0.20, '#ff6b8b');
-      fruitGrad.addColorStop(0.58, '#d91a4c');
-      fruitGrad.addColorStop(0.86, '#880e4f');
-      fruitGrad.addColorStop(1, '#4d0013');
-
-      context.beginPath();
-      context.ellipse(0, 5, 13.5, 18.5, 0.04, 0, Math.PI * 2);
-      context.fillStyle = fruitGrad;
-      context.fill();
-      context.strokeStyle = '#ffb3c1';
-      context.lineWidth = 1.1;
-      context.stroke();
-
-      context.shadowBlur = 0;
-      context.beginPath();
-      context.ellipse(-4.5, -2, 2.5, 6, -0.40, 0, Math.PI * 2);
-      context.fillStyle = 'rgba(255, 255, 255, 0.85)';
-      context.fill();
-
-      context.fillStyle = '#33000d';
-      context.beginPath();
-      context.arc(0, 22.5, 2.2, 0, Math.PI * 2);
-      context.fill();
-
-      context.restore();
-    }
-
-    function drawHighlight(x, y, type, darkMode, time) {
-      const baseRadius = type === 'fruit' ? 33 : type === 'flower' ? 30 : 28;
-      const pulse = state.reducedMotion ? 0 : Math.sin(time / 240) * 3;
-
-      context.save();
-      context.shadowColor = '#ffd700';
-      context.shadowBlur = 18;
+      // Outer glowing ring
       context.beginPath();
       context.arc(x, y, baseRadius + pulse, 0, Math.PI * 2);
-      context.strokeStyle = 'rgba(255, 215, 0, 0.95)';
-      context.lineWidth = 2.8;
+      context.strokeStyle = isPrimary ? '#ffd700' : glowColor;
+      context.lineWidth = isPrimary ? 2.5 : 1.8;
       context.stroke();
 
+      // Secondary halo ring
       context.beginPath();
-      context.arc(x, y, baseRadius + 7 + pulse * 0.45, 0, Math.PI * 2);
-      context.strokeStyle = 'rgba(255, 235, 140, 0.4)';
+      context.arc(x, y, baseRadius + 6 + pulse * 0.45, 0, Math.PI * 2);
+      context.strokeStyle = 'rgba(255, 235, 140, 0.45)';
+      context.lineWidth = 1.2;
+      context.stroke();
+
+      // Sparkling orbiting particles
+      for (let i = 0; i < 4; i += 1) {
+        const angle = time / 800 + i * Math.PI / 2;
+        const sparkleX = x + Math.cos(angle) * (baseRadius + 8.5);
+        const sparkleY = y + Math.sin(angle) * (baseRadius + 8.5);
+        context.fillStyle = '#fffde7';
+        context.beginPath();
+        context.arc(sparkleX, sparkleY, 2.0, 0, Math.PI * 2);
+        context.fill();
+      }
+      context.restore();
+    }
+
+    function drawLeafNameTag(x, y, order, isPrimary) {
+      context.save();
+      const amountText = `₹${order.orderAmount.toLocaleString('en-IN')}`;
+      const text = `${symbolFor(order.type)} ${order.displayName} · ${amountText}`;
+      context.font = '600 12px "Plus Jakarta Sans", system-ui, -apple-system, sans-serif';
+      const textMetrics = context.measureText(text);
+      const textWidth = textMetrics.width;
+      const paddingX = 10;
+      const boxWidth = textWidth + paddingX * 2;
+      const boxHeight = 24;
+      const badgeY = Math.max(8, y - 42);
+      const badgeX = Math.min(state.width - boxWidth - 8, Math.max(8, x - boxWidth / 2));
+      const radius = 12;
+
+      // Connecting pointer line from badge to element
+      context.beginPath();
+      context.moveTo(x, y);
+      context.lineTo(x, badgeY + boxHeight);
+      context.strokeStyle = isPrimary ? '#ffd700' : 'rgba(255, 215, 0, 0.65)';
       context.lineWidth = 1.4;
       context.stroke();
 
-      for (let i = 0; i < 4; i += 1) {
-        const angle = time / 800 + i * Math.PI / 2;
-        const sparkleX = x + Math.cos(angle) * (baseRadius + 9.5);
-        const sparkleY = y + Math.sin(angle) * (baseRadius + 9.5);
-        context.fillStyle = '#fffde7';
-        context.beginPath();
-        context.arc(sparkleX, sparkleY, 2.1, 0, Math.PI * 2);
-        context.fill();
-      }
-      context.restore();
-    }
+      // Center anchor dot on element
+      context.beginPath();
+      context.arc(x, y, 3, 0, Math.PI * 2);
+      context.fillStyle = '#ffd700';
+      context.fill();
 
-    function getGrowthScale(order, time) {
-      if (state.reducedMotion || !order.spawnedAt) return 1;
-      const progress = Math.min(1, Math.max(0, (time - order.spawnedAt) / 760));
-      if (progress >= 1) {
-        order.spawnedAt = null;
-        return 1;
-      }
-      const back = 1.70158;
-      const shifted = progress - 1;
-      return 1 + (back + 1) * shifted * shifted * shifted + back * shifted * shifted;
+      // Badge drop shadow
+      context.shadowColor = 'rgba(0, 0, 0, 0.70)';
+      context.shadowBlur = 10;
+      context.shadowOffsetY = 4;
+
+      // Badge pill background
+      context.beginPath();
+      context.roundRect(badgeX, badgeY, boxWidth, boxHeight, radius);
+      context.fillStyle = isPrimary ? 'rgba(24, 20, 16, 0.96)' : 'rgba(30, 26, 22, 0.90)';
+      context.fill();
+
+      // Golden badge border
+      context.strokeStyle = isPrimary ? '#ffd700' : 'rgba(255, 215, 0, 0.55)';
+      context.lineWidth = isPrimary ? 1.5 : 1.0;
+      context.stroke();
+      context.shadowBlur = 0;
+
+      // Badge typography
+      context.fillStyle = isPrimary ? '#fff7ed' : '#fef08a';
+      context.textBaseline = 'middle';
+      context.textAlign = 'left';
+      context.fillText(text, badgeX + paddingX, badgeY + boxHeight / 2);
+
+      context.restore();
     }
 
     function handlePointerMove(event) {
@@ -884,7 +588,7 @@
 
     function updateDetail(order) {
       detail.textContent = order
-        ? `${symbolFor(order.type)} ${order.displayName} grows as a ${order.type}. ${tierText(order.type)}.`
+        ? `${symbolFor(order.type)} ${order.displayName} grows as a ${tierName(order.type)}. ${tierText(order.type)}.`
         : 'Hover, tap, or choose a name to explore the tree.';
     }
 
@@ -895,12 +599,13 @@
     }
 
     function showTooltip(order, x, y) {
-      tooltip.textContent = `${symbolFor(order.type)} ${order.displayName} · ${capitalize(order.type)}`;
+      const amountText = `₹${order.orderAmount.toLocaleString('en-IN')}`;
+      tooltip.textContent = `${symbolFor(order.type)} ${order.displayName} · ${tierName(order.type)} (${amountText})`;
       tooltip.classList.add('is-visible');
       tooltip.setAttribute('aria-hidden', 'false');
       const maxLeft = Math.max(12, state.width - tooltip.offsetWidth - 12);
       const left = Math.min(maxLeft, Math.max(12, x - tooltip.offsetWidth / 2));
-      const top = Math.max(12, y - 58);
+      const top = Math.max(12, y - 56);
       tooltip.style.left = `${left}px`;
       tooltip.style.top = `${top}px`;
     }
@@ -999,8 +704,9 @@
       const amount = Number(order.orderAmount);
       if (!displayName || !Number.isFinite(amount) || amount < 0) return null;
 
+      const type = tierForAmount(amount);
       const id = String(order.orderId || order.id || `tree-${Date.now()}-${index}`);
-      const fallback = getAvailableCoordinate(id, index);
+      const fallback = getCoordinateForTier(type, id, index);
       const x = clampCoordinate(order.x, fallback[0]);
       const y = clampCoordinate(order.y, fallback[1]);
       return {
@@ -1008,25 +714,28 @@
         displayName,
         orderAmount: amount,
         timestamp: validTimestamp(order.timestamp),
-        type: tierForAmount(amount),
+        type,
         x,
         y,
         spawnedAt: animate && !state.reducedMotion ? performance.now() : null,
         screenX: 0,
         screenY: 0,
-        hitRadius: 26
+        hitRadius: 24
       };
     }
 
-    function getAvailableCoordinate(id, index) {
-      const base = (hashString(id) + index) % SLOT_COORDINATES.length;
-      return SLOT_COORDINATES[base];
+    function getCoordinateForTier(type, id, index) {
+      let pool = LEAF_COORDINATES;
+      if (type === 'flower') pool = BLOSSOM_COORDINATES;
+      else if (type === 'fruit') pool = CHERRY_COORDINATES;
+      const base = (hashString(id) + index) % pool.length;
+      return pool[base];
     }
 
     function clampCoordinate(value, fallback) {
       const number = Number(value);
       if (!Number.isFinite(number)) return fallback;
-      return Math.min(0.94, Math.max(0.06, number));
+      return Math.min(0.95, Math.max(0.05, number));
     }
   }
 
@@ -1036,20 +745,22 @@
     return 'fruit';
   }
 
+  function tierName(type) {
+    if (type === 'leaf') return 'Leaf';
+    if (type === 'flower') return 'Blossom';
+    return 'Cherry';
+  }
+
   function tierText(type) {
-    if (type === 'leaf') return 'This tier represents orders below ₹500';
-    if (type === 'flower') return 'This tier represents orders from ₹500 to ₹1,000';
-    return 'This tier represents orders above ₹1,000';
+    if (type === 'leaf') return 'This tier represents orders below ₹500 (🍃 Leaf)';
+    if (type === 'flower') return 'This tier represents orders from ₹500 to ₹1,000 (🌸 Blossom)';
+    return 'This tier represents orders above ₹1,000 (🍒 Cherry)';
   }
 
   function symbolFor(type) {
     if (type === 'leaf') return '🍃';
     if (type === 'flower') return '🌸';
-    return '🍎';
-  }
-
-  function capitalize(value) {
-    return value.charAt(0).toUpperCase() + value.slice(1);
+    return '🍒';
   }
 
   function validTimestamp(value) {
@@ -1066,4 +777,3 @@
     return hash >>> 0;
   }
 })();
-
