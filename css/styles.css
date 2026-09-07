@@ -2786,4 +2786,440 @@ button {
   }
 }
 
+/* ==========================================================================
+   Editorial Craft Additions (Inspired by Cold Brew House)
+   ========================================================================== */
 
+/* 1. Animated Scroll Cue Pill */
+.scroll-cue {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 52px;
+  border: 1.5px solid rgba(90, 33, 15, 0.28);
+  border-radius: 999px;
+  z-index: 10;
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.scroll-cue:hover,
+.scroll-cue:focus-visible {
+  border-color: var(--accent-burnt-orange);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.scroll-cue-dot {
+  width: 4px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent-burnt-orange);
+  animation: cue-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes cue-bounce {
+  0%, 100% {
+    opacity: 0.35;
+    transform: translateY(-8px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(8px);
+  }
+}
+
+[data-theme="dark"] .scroll-cue {
+  border-color: rgba(197, 160, 89, 0.35);
+}
+
+/* 2. Editorial Section Kicker */
+.section-kicker {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 780;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-burnt-orange);
+  margin-bottom: 1.25rem;
+}
+
+/* 3. Signature Craft Spotlight Section */
+.signature-spotlight-section {
+  padding: 6.5rem 0 5.5rem;
+  background-color: var(--bg-card);
+  border-top: 1px solid rgba(90, 33, 15, 0.08);
+  border-bottom: 1px solid rgba(90, 33, 15, 0.08);
+  position: relative;
+}
+
+.signature-spotlight-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(360px, 1.05fr);
+  gap: 5rem;
+  align-items: center;
+}
+
+.signature-figure {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 8px solid #FFFFFF;
+  margin: 0;
+  background: var(--bg-ivory);
+}
+
+.signature-figure img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-slow);
+}
+
+.signature-figure:hover img {
+  transform: scale(1.03);
+}
+
+.signature-badge {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  background: var(--bg-forest);
+  color: var(--text-light);
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+}
+
+.signature-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.3rem, 4.2vw, 3.5rem);
+  color: var(--heading-color);
+  line-height: 1.12;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.signature-desc {
+  font-size: 1.12rem;
+  color: var(--text-medium);
+  line-height: 1.75;
+  margin-bottom: 2.25rem;
+  max-width: 580px;
+}
+
+/* Artisanal Tasting Notes Grid */
+.tasting-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 1.75rem 0;
+  margin: 2.5rem 0;
+  border-top: 1px solid rgba(90, 33, 15, 0.15);
+  border-bottom: 1px solid rgba(90, 33, 15, 0.15);
+}
+
+.tasting-note-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.tasting-note-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--millet-green);
+  margin-bottom: 0.45rem;
+}
+
+.tasting-note-val {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--heading-color);
+  line-height: 1.25;
+}
+
+.signature-actions,
+.visit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+/* 4. Our Craft Process Section */
+.craft-process-section {
+  padding: 6.5rem 0 6rem;
+  background-color: var(--bg-ivory);
+  position: relative;
+}
+
+.craft-process-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(380px, 1.05fr);
+  gap: 5rem;
+  align-items: center;
+}
+
+.craft-process-art-frame {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #FFFFFF;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(90, 33, 15, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.craft-process-art-frame img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  transition: transform var(--transition-slow);
+}
+
+.craft-process-art-frame:hover img {
+  transform: scale(1.02);
+}
+
+.craft-process-quote {
+  margin-top: 1.5rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-medium);
+  text-align: center;
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.craft-process-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.3rem, 4.2vw, 3.5rem);
+  color: var(--heading-color);
+  line-height: 1.12;
+  margin-bottom: 2rem;
+  letter-spacing: -0.01em;
+}
+
+.craft-process-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(90, 33, 15, 0.15);
+}
+
+.craft-step-item {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 1.75rem;
+  align-items: baseline;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(90, 33, 15, 0.15);
+}
+
+.craft-step-number {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--accent-burnt-orange);
+  line-height: 1;
+}
+
+.craft-step-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin-bottom: 0.45rem;
+  line-height: 1.25;
+}
+
+.craft-step-desc {
+  font-size: 1.02rem;
+  color: var(--text-medium);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* 5. Visit Sanctuary Section */
+.visit-section {
+  padding: 6.5rem 0;
+  background-color: var(--bg-card);
+  border-top: 1px solid rgba(90, 33, 15, 0.08);
+  border-bottom: 1px solid rgba(90, 33, 15, 0.08);
+  position: relative;
+}
+
+.visit-grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.02fr) minmax(340px, 0.98fr);
+  gap: 4.5rem;
+  align-items: center;
+}
+
+.visit-figure {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 8px solid #FFFFFF;
+  margin: 0;
+  background: var(--bg-ivory);
+}
+
+.visit-figure img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  object-position: center;
+  transition: transform var(--transition-slow);
+}
+
+.visit-figure:hover img {
+  transform: scale(1.03);
+}
+
+.visit-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.3rem, 4.2vw, 3.5rem);
+  color: var(--heading-color);
+  line-height: 1.12;
+  margin-bottom: 1.25rem;
+  letter-spacing: -0.01em;
+}
+
+.visit-desc {
+  font-size: 1.12rem;
+  color: var(--text-medium);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+  max-width: 580px;
+}
+
+.visit-details-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 2.5rem;
+}
+
+.visit-detail-pill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1.25rem;
+  background: rgba(90, 33, 15, 0.04);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--accent-burnt-orange);
+}
+
+.visit-detail-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-burnt-orange);
+}
+
+.visit-detail-val {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+/* Dark Mode Overrides for Editorial Additions */
+[data-theme="dark"] .signature-spotlight-section,
+[data-theme="dark"] .visit-section {
+  background-color: #1a0f0a;
+  border-color: rgba(197, 160, 89, 0.15);
+}
+
+[data-theme="dark"] .craft-process-section {
+  background-color: var(--bg-ivory);
+}
+
+[data-theme="dark"] .signature-figure,
+[data-theme="dark"] .visit-figure {
+  border-color: #2b1710;
+}
+
+[data-theme="dark"] .craft-process-art-frame {
+  background: #24140d;
+  border-color: rgba(197, 160, 89, 0.2);
+}
+
+[data-theme="dark"] .tasting-notes-grid,
+[data-theme="dark"] .craft-process-steps,
+[data-theme="dark"] .craft-step-item {
+  border-color: rgba(197, 160, 89, 0.2);
+}
+
+[data-theme="dark"] .visit-detail-pill {
+  background: rgba(197, 160, 89, 0.08);
+}
+
+/* Responsive Styles for Editorial Additions */
+@media (max-width: 992px) {
+  .signature-spotlight-grid,
+  .craft-process-grid,
+  .visit-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .signature-figure img,
+  .visit-figure img {
+    height: 420px;
+  }
+
+  .tasting-notes-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .signature-spotlight-section,
+  .craft-process-section,
+  .visit-section {
+    padding: 4.5rem 0;
+  }
+
+  .signature-figure img,
+  .visit-figure img {
+    height: 320px;
+  }
+
+  .tasting-notes-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .craft-step-item {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .visit-detail-pill {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+}

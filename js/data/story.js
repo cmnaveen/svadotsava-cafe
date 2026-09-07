@@ -72,5 +72,57 @@ window.SVADOTSAVA_DATA_STORY = {
     ],
     "image": "assets/images/menu/cappuccino.webp",
     "imageAlt": "Cappuccino prepared for the Svādotsava café"
+  },
+  "signatureSpotlight": {
+    "kicker": "Signature Craft Coffee",
+    "title": "Slow by Ritual. Rich by Heritage.",
+    "description": "Our house decoction brews patiently through perforated traditional brass filters over twelve hours, extracting deep cocoa undertones, caramelized jaggery sweetness, and roasted chicory warmth without astringency.",
+    "image": "assets/images/menu/classic_filter_coffee.webp",
+    "imageAlt": "Svādotsava signature South Indian filter coffee in traditional brass dabarah",
+    "tastingNotes": [
+      { "dt": "Body", "dd": "Silky & Full" },
+      { "dt": "Origin", "dd": "Chikmagalur" },
+      { "dt": "Notes", "dd": "Cocoa & Chicory" },
+      { "dt": "Serve", "dd": "Brass Dabarah" }
+    ],
+    "primaryBtn": "Explore Menu",
+    "secondaryBtn": "Our Process"
+  },
+  "craftProcess": {
+    "kicker": "Our Process",
+    "title": "Time Does the Honest Work.",
+    "image": "assets/images/brand/svadotsava_brewing_art.webp",
+    "imageAlt": "Minimalist artisanal illustration of traditional South Indian brass filter and dabarah brewing ritual",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Single-Estate Slow Roast",
+        "description": "Sun-dried Arabica and washed Robusta hand-harvested from high-altitude shade-grown estates in the Western Ghats, roasted in small batches to preserve chocolate and spice notes."
+      },
+      {
+        "step": "02",
+        "title": "12-Hour Brass Decoction",
+        "description": "Coarsely ground beans rest with boiling water in traditional gravity-fed brass drip filters, steeping slowly through quiet hours to yield a thick, glossy aromatic concentrate."
+      },
+      {
+        "step": "03",
+        "title": "The Meter-Pour Aeration",
+        "description": "Steamed fresh milk and hot decoction are pulled from height into a wide brass dabarah, whipping a signature velvety micro-foam crown and cooling the cup to sipping temperature."
+      }
+    ]
+  },
+  "visitSanctuary": {
+    "kicker": "Visit Us · Opening Summer 2029",
+    "title": "Come In. Slow Down. Stay Awhile.",
+    "description": "Sunlit corners, the quiet aroma of freshly ground roasts, handcrafted bakes emerging warm from the oven, and communal wooden tables created for unhurried conversations. Window nooks and bar seating are held for walk-ins.",
+    "image": "assets/images/brand/svadotsava_storefront.webp?v=8",
+    "imageAlt": "Svadotsava Cafe and Restaurant storefront with outdoor tables and sunlit greenery",
+    "details": [
+      { "label": "Morning Hours", "value": "Daily from 7:00 AM" },
+      { "label": "Walk-Ins", "value": "Always Welcome" },
+      { "label": "Atmosphere", "value": "Calm, Sunlit & Communal" }
+    ],
+    "primaryBtn": "Join Opening Guest List",
+    "secondaryBtn": "Connect With Us"
   }
 };

@@ -24,11 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialization
   initHeader();
   renderHero(DATA.hero);
+  renderSignatureSpotlight(DATA.signatureSpotlight);
+  renderCraftProcess(DATA.craftProcess);
   renderAnnouncement(DATA.announcement);
   renderExperiences(DATA.experiences);
   renderStory(DATA.story);
   renderMenu(DATA.menuCategories, DATA.menuItems);
   renderMilletMarvels(DATA.milletMarvels);
+  renderVisitSanctuary(DATA.visitSanctuary);
   renderGallery(DATA.gallery);
   renderInnerCircle(DATA.innerCircle);
   renderContact(DATA.business);
@@ -158,6 +161,75 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="hero-floating-title">Warm Café Hospitality</div>
             <div class="hero-floating-desc">Coffee, Tea, Bakes & Café Plates</div>
           </div>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#signature-spotlight" aria-label="Scroll to signature craft coffee">
+        <span class="scroll-cue-dot" aria-hidden="true"></span>
+      </a>
+    `;
+  }
+
+  function renderSignatureSpotlight(spotlightData) {
+    const container = document.getElementById('signature-spotlight-content');
+    if (!container || !spotlightData) return;
+
+    container.innerHTML = `
+      <div class="signature-spotlight-grid">
+        <div class="signature-image-col reveal-on-scroll">
+          <figure class="signature-figure">
+            <img src="${spotlightData.image}" alt="${spotlightData.imageAlt}" loading="lazy" />
+            <figcaption class="signature-badge">Craft Pour · Brass Filter</figcaption>
+          </figure>
+        </div>
+        <div class="signature-copy-col reveal-on-scroll">
+          <div class="section-kicker">${spotlightData.kicker}</div>
+          <h2 class="section-title signature-title" id="signature-title">${spotlightData.title}</h2>
+          <p class="signature-desc">${spotlightData.description}</p>
+          <dl class="tasting-notes-grid" aria-label="Signature coffee tasting notes">
+            ${(spotlightData.tastingNotes || []).map(note => `
+              <div class="tasting-note-item">
+                <dt class="tasting-note-label">${note.dt}</dt>
+                <dd class="tasting-note-val">${note.dd}</dd>
+              </div>
+            `).join('')}
+          </dl>
+          <div class="signature-actions">
+            <a href="#menu" class="btn btn-primary">${spotlightData.primaryBtn}</a>
+            <a href="#craft-process" class="btn btn-secondary">${spotlightData.secondaryBtn}</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderCraftProcess(processData) {
+    const container = document.getElementById('craft-process-content');
+    if (!container || !processData) return;
+
+    container.innerHTML = `
+      <div class="craft-process-grid">
+        <div class="craft-process-art-col reveal-on-scroll">
+          <div class="craft-process-art-frame">
+            <img src="${processData.image}" alt="${processData.imageAlt}" loading="lazy" />
+          </div>
+          <div class="craft-process-quote">
+            “Patience turns shade-grown beans and heirloom grains into celebrated everyday rituals.”
+          </div>
+        </div>
+        <div class="craft-process-copy-col reveal-on-scroll">
+          <div class="section-kicker">${processData.kicker}</div>
+          <h2 class="section-title craft-process-title" id="process-title">${processData.title}</h2>
+          <ol class="craft-process-steps">
+            ${(processData.steps || []).map(st => `
+              <li class="craft-step-item">
+                <span class="craft-step-number" aria-hidden="true">${st.step}</span>
+                <div class="craft-step-body">
+                  <h3 class="craft-step-title">${st.title}</h3>
+                  <p class="craft-step-desc">${st.description}</p>
+                </div>
+              </li>
+            `).join('')}
+          </ol>
         </div>
       </div>
     `;
@@ -482,6 +554,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
+     9B. Visit Us Sanctuary Section
+     ========================================================================== */
+  function renderVisitSanctuary(visitData) {
+    const container = document.getElementById('visit-content');
+    if (!container || !visitData) return;
+
+    container.innerHTML = `
+      <div class="visit-grid">
+        <div class="visit-image-col reveal-on-scroll">
+          <figure class="visit-figure">
+            <img src="${visitData.image}" alt="${visitData.imageAlt}" loading="lazy" />
+          </figure>
+        </div>
+        <div class="visit-copy-col reveal-on-scroll">
+          <div class="section-kicker">${visitData.kicker}</div>
+          <h2 class="section-title visit-title" id="visit-title">${visitData.title}</h2>
+          <p class="visit-desc">${visitData.description}</p>
+          <div class="visit-details-pills">
+            ${(visitData.details || []).map(det => `
+              <div class="visit-detail-pill">
+                <span class="visit-detail-label">${det.label}</span>
+                <span class="visit-detail-val">${det.value}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="visit-actions">
+            <a href="#inner-circle" class="btn btn-primary">${visitData.primaryBtn}</a>
+            <a href="#contact" class="btn btn-secondary">${visitData.secondaryBtn}</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ==========================================================================
      10. Inner Circle Form & Validation
      ========================================================================== */
   function renderInnerCircle(circleData) {
@@ -687,10 +794,12 @@ ${userName}`
           <h4 class="footer-title">Navigation</h4>
           <ul class="footer-links">
             <li><a href="#hero" class="footer-link">Home</a></li>
-            <li><a href="#experience" class="footer-link">Experiences</a></li>
-            <li><a href="#story" class="footer-link">Our Story</a></li>
+            <li><a href="#signature-spotlight" class="footer-link">Signature Craft</a></li>
+            <li><a href="#craft-process" class="footer-link">Our Process</a></li>
             <li><a href="#menu" class="footer-link">Café Menu</a></li>
             <li><a href="#millet-marvels" class="footer-link">Millet Marvels</a></li>
+            <li><a href="#story" class="footer-link">Our Story</a></li>
+            <li><a href="#visit" class="footer-link">Visit Us</a></li>
           </ul>
         </div>
 

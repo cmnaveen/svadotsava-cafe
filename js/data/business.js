@@ -4,7 +4,7 @@
 window.SVADOTSAVA_DATA_BUSINESS = {
   name: "Svādotsava",
   tagline: "A Celebration of Taste",
-  openingStatus: "Café Opening Summer 2029",
+  openingStatus: "Café & Restaurant Opening Summer 2029",
   exactDate: "Exact opening date to be announced",
   location: "South India",
   address: "Exact address to be announced closer to opening",
