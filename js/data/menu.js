@@ -126,64 +126,6 @@ window.SVADOTSAVA_DATA_MENU = {
       "imageAlt": "Tall glass of iced cold coffee with creamy top"
     },
     {
-      "id": "m16",
-      "name": "Butter Croissant",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Flaky, multi-laminated French butter pastry baked golden brown each morning.",
-      "badges": [
-        "Vegetarian",
-        "Contains Dairy"
-      ],
-      "image": "assets/images/menu/butter_croissant.webp",
-      "imageAlt": "Fresh butter croissant with flaky layers"
-    },
-    {
-      "id": "m17",
-      "name": "Vegan Croissant",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Crispy plant-based croissant crafted with cold-pressed coconut oil and organic flour.",
-      "badges": [
-        "Vegan"
-      ],
-      "image": "assets/images/menu/vegan_croissant.webp",
-      "imageAlt": "Golden vegan croissant baked freshly"
-    },
-    {
-      "id": "m18",
-      "name": "Almond Croissant",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Twice-baked butter croissant filled with almond frangipane cream and topped with toasted almond slices.",
-      "badges": [
-        "Vegetarian",
-        "Contains Nuts"
-      ],
-      "image": "assets/images/menu/almond_croissant.webp",
-      "imageAlt": "Almond croissant dusted with powdered sugar"
-    },
-    {
-      "id": "m19",
-      "name": "Cinnamon Roll",
-      "category": "desserts",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Soft brioche spiral filled with aromatic Ceylon cinnamon, brown sugar, and light cream glaze.",
-      "badges": [
-        "Vegetarian"
-      ],
-      "image": "assets/images/menu/cinnamon_roll.webp",
-      "imageAlt": "Warm cinnamon roll with vanilla glaze"
-    },
-    {
       "id": "m20",
       "name": "Banana Walnut Muffin",
       "category": "desserts",
@@ -321,6 +263,72 @@ window.SVADOTSAVA_DATA_MENU = {
       "imageAlt": "Tandoori chicken pizza with mozzarella, onion, bell pepper, coriander, and yogurt drizzle",
       "hasRecipe": true,
       "recipeId": "sourdough-pizza"
+    },
+    {
+      "id": "m29",
+      "name": "Millet Podi Ghee Dosa",
+      "category": "cafe",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Crisp 24-hr fermented multi-millet crepe generously dusted with house-roasted spiced podi and pure desi ghee. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Contains Dairy",
+        "Served with 3 Chutneys",
+        "Millet Marvel"
+      ],
+      "image": "assets/images/millets/millet_podi_dosa.webp",
+      "imageAlt": "Millet Podi Ghee Dosa dusted with red gunpowder spice and glistening with ghee"
+    },
+    {
+      "id": "m30",
+      "name": "Heritage Millet Masala Dosa",
+      "category": "cafe",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Golden crisp multi-millet crepe lined with mild red chili paste and stuffed with spiced potato-onion filling. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Served with 3 Chutneys",
+        "Millet Marvel"
+      ],
+      "image": "assets/images/millets/millet_masala_dosa.webp?v=18",
+      "imageAlt": "Heritage Millet Masala Dosa with spiced potato filling and three chutneys"
+    },
+    {
+      "id": "m31",
+      "name": "Artisanal Millet Plain Dosa",
+      "category": "cafe",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Paper-thin, golden multi-millet crepe cooked with cold-pressed sesame oil or butter. Light, airy, and served with Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Served with 3 Chutneys",
+        "Millet Marvel"
+      ],
+      "image": "assets/images/millets/millet_plain_dosa.webp",
+      "imageAlt": "Artisanal Millet Plain Dosa folded into a golden crispy roll with trio of chutneys"
+    },
+    {
+      "id": "m32",
+      "name": "Heritage Millet Set Dosa",
+      "category": "cafe",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Set of 3 soft, fluffy, golden-spotted spongy multi-millet dosas served with fresh white butter and the trio of Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Set of 3 Dosas",
+        "Served with 3 Chutneys",
+        "Millet Marvel"
+      ],
+      "image": "assets/images/millets/millet_set_dosa.webp",
+      "imageAlt": "Heritage Millet Set Dosa stack with butter and three chutneys"
     }
   ]
 };

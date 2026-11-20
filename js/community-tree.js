@@ -172,8 +172,11 @@
       addOrder: (payload) => addOrder(payload, true)
     });
 
+    let returnFocusElement = null;
+
     function openPanel() {
       if (state.isOpen) return;
+      returnFocusElement = document.activeElement;
       state.isOpen = true;
       if (panel) panel.hidden = false;
       toggle?.setAttribute('aria-expanded', 'true');
@@ -202,7 +205,13 @@
       window.setTimeout(() => {
         if (!state.isOpen && panel) panel.hidden = true;
       }, state.reducedMotion ? 0 : 280);
-      toggle?.focus();
+
+      if (returnFocusElement && typeof returnFocusElement.focus === 'function') {
+        returnFocusElement.focus();
+      } else {
+        toggle?.focus();
+      }
+      returnFocusElement = null;
     }
 
     function resizeCanvas() {

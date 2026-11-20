@@ -4,41 +4,117 @@
 window.SVADOTSAVA_DATA_MILLETS = {
   "heading": "Millet Marvels",
   "subheading": "Ancient Grains, Crafted for Café Life",
-  "intro": "Millets bring nourishment, texture, and South Indian grain heritage into our café through thoughtful modern treats — from cookies and laddus to drinks and seasonal bowls.",
+  "intro": "Millets bring nourishment, texture, and South Indian grain heritage into our café through thoughtful modern treats — from slow-fermented artisanal dosas and wholesome bowls to cookies and laddus.",
   "image": "assets/images/millets/hero_grains.webp",
   "imageAlt": "A selection of heritage millet grains",
+  "dosaFeature": {
+    "badge": "Signature Café Special",
+    "title": "Heritage Multi-Millet Dosa Collection",
+    "subtitle": "Slow-Fermented · Crisped on Cast Iron · High Fiber & Nutrient-Dense",
+    "description": "Slowly fermented over 24 hours using a heritage multi-millet blend of Foxtail, Kodo, Barnyard, and Little Millets with Urad Dal. Naturally light, golden-crisp, and griddled with cold-pressed sesame oil or pure A2 desi ghee. Each dosa is served piping hot with our trio of freshly prepared house chutneys.",
+    "image": "assets/images/millets/millet_dosa_trio_chutneys.webp",
+    "imageAlt": "Crisp golden South Indian multi-millet dosa served with tomato chutney, groundnut chutney, and pudina mint chutney",
+    "chutneysTitle": "Served With Our 3 Signature House Chutneys",
+    "chutneys": [
+      {
+        "name": "Tamato Chutney",
+        "label": "Tangy Country Tomato",
+        "icon": "🍅",
+        "description": "Slow-simmered country tomatoes with shallots, dried red chillies, and mustard seed-curry leaf tadka."
+      },
+      {
+        "name": "Ground Nut Chutney",
+        "label": "Creamy Roasted Peanut",
+        "icon": "🥜",
+        "description": "Slow-roasted peanuts stone-ground with green chillies, cumin, ginger, and golden mustard tempering."
+      },
+      {
+        "name": "Pudina Chutney",
+        "label": "Fresh Garden Mint",
+        "icon": "🌿",
+        "description": "Vibrant fresh mint and coriander leaves ground with roasted gram, green chillies, and a splash of lime."
+      }
+    ],
+    "dosas": [
+      {
+        "id": "millet-podi-dosa",
+        "name": "Millet Podi Ghee Dosa",
+        "type": "Spiced & Aromatic",
+        "description": "Crisp multi-millet crepe generously dusted with our house-roasted spiced gun powder (Karampodi made from roasted lentils and spices) and drizzled with fragrant golden desi ghee.",
+        "grains": "Barnyard & Foxtail Millet",
+        "image": "assets/images/millets/millet_podi_dosa.webp",
+        "servedWith": "Served with Tamato Chutney, Ground Nut Chutney, and Pudina Chutney."
+      },
+      {
+        "id": "millet-plain-dosa",
+        "name": "Artisanal Millet Plain Dosa (Sada)",
+        "type": "Lace-Edged & Crisp",
+        "description": "Paper-thin, golden multi-millet crepe griddled with cold-pressed sesame oil or butter. Light, airy, and delicately fermented for effortless digestion.",
+        "grains": "Foxtail, Kodo & Little Millet",
+        "image": "assets/images/millets/millet_plain_dosa.webp",
+        "servedWith": "Served with Tamato Chutney, Ground Nut Chutney, and Pudina Chutney."
+      },
+      {
+        "id": "millet-masala-dosa",
+        "name": "Heritage Millet Masala Dosa",
+        "type": "Hearty Café Classic",
+        "description": "Golden crisp crepe brushed with aromatic red chili-garlic paste and wrapped around our spiced potato-onion filling tempered with mustard seeds and curry leaves.",
+        "grains": "Multi-Millet Heritage Blend",
+        "image": "assets/images/millets/millet_masala_dosa.webp?v=18",
+        "servedWith": "Served with Tamato Chutney, Ground Nut Chutney, and Pudina Chutney."
+      },
+      {
+        "id": "millet-ghee-roast-dosa",
+        "name": "Millet Ghee Roast Dosa",
+        "type": "Golden Amber Crunch",
+        "description": "Griddled slowly with generous pure A2 desi ghee until deeply caramelised and wafer-crisp, releasing rich nutty aromas in every bite.",
+        "grains": "Kodo & Barnyard Millet",
+        "image": "assets/images/millets/millet_plain_dosa.webp",
+        "servedWith": "Served with Tamato Chutney, Ground Nut Chutney, and Pudina Chutney."
+      },
+      {
+        "id": "millet-set-dosa",
+        "name": "Heritage Millet Set Dosa",
+        "type": "Soft, Spongy & Cloud-Light",
+        "description": "A classic set of 3 fluffy, spongy, golden-spotted multi-millet dosas made with flattened rice (poha) and topped with fresh white butter. Melt-in-mouth soft comfort.",
+        "grains": "Foxtail, Kodo & Barnyard Millet with Poha",
+        "image": "assets/images/millets/millet_set_dosa.webp",
+        "servedWith": "Served with Tamato Chutney, Ground Nut Chutney, and Pudina Chutney."
+      }
+    ]
+  },
   "cards": [
     {
-      "grain": "Ragi Almond Butter Biscuits",
-      "benefit": "Buttery, crumbly biscuits with earthy ragi and almond flour for a rich, roasted finish that pairs beautifully with tea or coffee.",
-      "dishPreview": "Biscuit · Tea-time favourite",
-      "icon": "🍪",
-      "image": "assets/images/millets/ragi_almond_butter_biscuits.webp",
-      "imageAlt": "Ragi almond butter biscuits from the Svādotsava millet café collection"
+      "grain": "Heritage Millet Set Dosa",
+      "benefit": "Set of 3 cloud-soft, spongy multi-millet dosas topped with fresh melting butter. Served with trio of Tamato, Ground Nut, and Pudina chutneys.",
+      "dishPreview": "Hot Dosa Plate · Set of 3 Spongy Dosas",
+      "icon": "🥞",
+      "image": "assets/images/millets/millet_set_dosa.webp",
+      "imageAlt": "Heritage Millet Set Dosa stack served with butter and trio of fresh chutneys"
     },
     {
-      "grain": "Jowar Crunch Cookies",
-      "benefit": "Golden cookies with a light crunch, gently toasted jowar notes, and a rustic texture made for slow chai breaks.",
-      "dishPreview": "Cookie · Crisp and rustic",
-      "icon": "🌾",
-      "image": "assets/images/millets/jowar_crunch_cookies.webp",
-      "imageAlt": "Jowar crunch cookies stacked with millet grains around them"
+      "grain": "Millet Podi Ghee Dosa",
+      "benefit": "Golden crisp multi-millet crepe dusted with house-roasted spiced podi and golden ghee. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "dishPreview": "Hot Dosa Plate · Served with 3 Chutneys",
+      "icon": "🥞",
+      "image": "assets/images/millets/millet_podi_dosa.webp",
+      "imageAlt": "Millet Podi Ghee Dosa dusted with red-orange spice gunpowder and glistening ghee"
     },
     {
-      "grain": "Multi-Millet Digestive Bites",
-      "benefit": "Wholesome seed-studded bites with gentle sweetness, subtle grain texture, and easy everyday café appeal.",
-      "dishPreview": "Biscuit · Everyday goodness",
-      "icon": "🍪",
-      "image": "assets/images/millets/multimillet_digestive_bites.webp",
-      "imageAlt": "Multimillet digestive bites from the Svādotsava millet café collection"
+      "grain": "Heritage Millet Masala Dosa",
+      "benefit": "Crisp multi-millet crepe filled with comforting spiced potato mash, served with trio of Tamato, Ground Nut, and Pudina chutneys.",
+      "dishPreview": "Hot Dosa Plate · Served with 3 Chutneys",
+      "icon": "🥔",
+      "image": "assets/images/millets/millet_masala_dosa.webp?v=18",
+      "imageAlt": "Heritage Millet Masala Dosa showing spiced yellow potato-onion filling and three chutneys"
     },
     {
-      "grain": "Heritage Millet & Roasted Nut Crunch",
-      "benefit": "Crisp, slow-baked biscuits with pearl millet, toasted almonds, and roasted cashews for a deeply nutty finish.",
-      "dishPreview": "Biscuit · Nutty indulgence",
-      "icon": "🥜",
-      "image": "assets/images/millets/heritage_millet_roasted_nut_crunch.webp",
-      "imageAlt": "Heritage millet and roasted nut crunch biscuits with almonds and cashews"
+      "grain": "Artisanal Millet Plain Dosa",
+      "benefit": "Paper-thin, golden lace crepe fermented from four ancient grains. Served with fresh Tamato, Ground Nut, and Pudina chutneys.",
+      "dishPreview": "Hot Dosa Plate · Served with 3 Chutneys",
+      "icon": "✨",
+      "image": "assets/images/millets/millet_plain_dosa.webp",
+      "imageAlt": "Artisanal Millet Plain Dosa folded into a golden crispy roll with trio of chutneys"
     },
     {
       "grain": "Oat & Dry Fruit Cookies",
@@ -89,5 +165,5 @@ window.SVADOTSAVA_DATA_MILLETS = {
       "imageAlt": "Traditional urad dal and ghee sunnundalu"
     }
   ],
-  "sourcingNote": "Our Millet Marvels collection will feature small-batch recipes, clear ingredients, and rotating seasonal creations. Final selections may vary with the café menu."
+  "sourcingNote": "Our Millet Marvels collection features small-batch recipes, natural slow fermentation, and pure stone-ground chutneys made fresh daily."
 };

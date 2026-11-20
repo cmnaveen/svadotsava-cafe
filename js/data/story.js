@@ -42,10 +42,10 @@ window.SVADOTSAVA_DATA_STORY = {
     {
       "id": "artisan-cafe",
       "title": "Bakes & Café Plates",
-      "subtitle": "Croissants, Toasts, Desserts & Chilled Drinks",
-      "description": "Fresh croissants, sourdough toasts, muffins, brownies, mango lassi, and relaxed plates for any time of day.",
-      "image": "assets/images/menu/butter_croissant.webp",
-      "imageAlt": "Freshly baked butter croissant"
+      "subtitle": "Sourdough Toasts, Bakes, Desserts & Chilled Drinks",
+      "description": "Artisanal sourdough toasts, fresh muffins, brownies, mango lassi, and relaxed plates for any time of day.",
+      "image": "assets/images/menu/avocado_toast.webp",
+      "imageAlt": "Artisanal sourdough avocado toast"
     },
     {
       "id": "millet-marvels",

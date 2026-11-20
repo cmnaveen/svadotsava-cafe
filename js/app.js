@@ -78,6 +78,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileNavDrawer = document.querySelector('.mobile-nav-drawer');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
 
+    const openDrawer = () => {
+      mobileNavDrawer?.classList.add('open');
+      hamburgerBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      const firstLink = mobileNavDrawer?.querySelector('a');
+      firstLink?.focus();
+    };
+
+    const closeDrawer = () => {
+      if (!mobileNavDrawer?.classList.contains('open')) return;
+      mobileNavDrawer.classList.remove('open');
+      hamburgerBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      hamburgerBtn?.focus();
+    };
+
     // Sticky scroll effect
     window.addEventListener('scroll', () => {
       if (window.scrollY > 40) {
@@ -86,46 +102,83 @@ document.addEventListener('DOMContentLoaded', () => {
         header?.classList.remove('scrolled');
       }
       highlightActiveNavLink();
-    });
+    }, { passive: true });
+
+    // Initial check on load
+    highlightActiveNavLink();
 
     // Mobile Hamburger Toggle
     hamburgerBtn?.addEventListener('click', () => {
-      const isOpen = mobileNavDrawer?.classList.contains('open');
-      if (isOpen) {
-        mobileNavDrawer?.classList.remove('open');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      if (mobileNavDrawer?.classList.contains('open')) {
+        closeDrawer();
       } else {
-        mobileNavDrawer?.classList.add('open');
-        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        openDrawer();
       }
     });
 
     mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
-        mobileNavDrawer?.classList.remove('open');
-        hamburgerBtn?.setAttribute('aria-expanded', 'false');
+        closeDrawer();
       });
+    });
+
+    // Close on Escape or trap focus inside mobile drawer
+    document.addEventListener('keydown', (e) => {
+      if (mobileNavDrawer?.classList.contains('open')) {
+        if (e.key === 'Escape') closeDrawer();
+        if (e.key === 'Tab') trapFocus(e, mobileNavDrawer);
+      }
     });
   }
 
   function highlightActiveNavLink() {
-    const sections = document.querySelectorAll('section[id]');
+    const scrollPos = (window.scrollY || window.pageYOffset || 0) + 160;
     const navLinks = document.querySelectorAll('.nav-link');
-    const scrollY = window.pageYOffset;
+    const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    if (!sections.length) return;
 
-    sections.forEach(current => {
-      const sectionHeight = current.offsetHeight;
-      const sectionTop = current.offsetTop - 120;
-      const sectionId = current.getAttribute('id');
-
-      if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${sectionId}`) {
-            link.classList.add('active');
-          }
-        });
+    let currentSectionId = '';
+    for (const section of sections) {
+      const top = section.offsetTop;
+      const height = section.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        currentSectionId = section.getAttribute('id');
+        break;
       }
+    }
+
+    if (window.scrollY < 80) {
+      currentSectionId = 'hero';
+    } else if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 50)) {
+      currentSectionId = 'contact';
+    }
+
+    if (!currentSectionId) return;
+
+    // Map intermediate sections to primary nav links
+    const sectionToNavMap = {
+      'announcement': 'craft-process',
+      'experience': 'craft-process',
+      'gallery': 'visit',
+      'inner-circle': 'visit'
+    };
+    const activeHeaderId = sectionToNavMap[currentSectionId] || currentSectionId;
+
+    navLinks.forEach(link => {
+      const isActive = link.getAttribute('href') === `#${activeHeaderId}`;
+      link.classList.toggle('active', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+
+    mobileLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      const isMobileActive = href === `#${currentSectionId}` || href === `#${activeHeaderId}`;
+      link.classList.toggle('active', isMobileActive);
     });
   }
 
@@ -428,6 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('millet-content');
     if (!container) return;
 
+    const dosaFeat = milletData.dosaFeature;
+
     container.innerHTML = `
       <div class="millet-heading">
         <div>
@@ -438,6 +493,85 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <img class="millet-hero-image" src="${milletData.image}" alt="${milletData.imageAlt}" loading="lazy" />
       </div>
+
+      ${dosaFeat ? `
+        <div class="millet-dosa-showcase reveal-on-scroll">
+          <div class="millet-dosa-grid">
+            <div class="millet-dosa-media">
+              <figure class="millet-dosa-figure">
+                <img src="${dosaFeat.image}" alt="${dosaFeat.imageAlt}" loading="lazy" />
+                <figcaption class="millet-dosa-badge">${dosaFeat.badge}</figcaption>
+              </figure>
+
+              <div class="chutney-trinity-card">
+                <div class="chutney-trinity-header">
+                  <span class="chutney-header-icon" aria-hidden="true">🥣</span>
+                  <div>
+                    <h4 class="chutney-trinity-title">${dosaFeat.chutneysTitle}</h4>
+                    <p class="chutney-trinity-sub">Ground fresh daily in small stone batches</p>
+                  </div>
+                </div>
+                <div class="chutney-trinity-grid">
+                  ${dosaFeat.chutneys.map(ch => `
+                    <div class="chutney-item">
+                      <div class="chutney-icon-wrap" aria-hidden="true">${ch.icon}</div>
+                      <div class="chutney-text">
+                        <strong class="chutney-name">${ch.name}</strong>
+                        <span class="chutney-label">${ch.label}</span>
+                        <p class="chutney-desc">${ch.description}</p>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="millet-dosa-content">
+              <div class="section-kicker">Cast-Iron Heritage Crepes</div>
+              <h3 class="millet-dosa-title">${dosaFeat.title}</h3>
+              <p class="millet-dosa-subtitle">${dosaFeat.subtitle}</p>
+              <p class="millet-dosa-desc">${dosaFeat.description}</p>
+
+              <div class="dosa-varieties-list">
+                ${dosaFeat.dosas.map(dosa => `
+                  <div class="dosa-variety-card">
+                    ${dosa.image ? `
+                      <div class="dosa-variety-thumb-wrap">
+                        <img src="${dosa.image}" alt="${dosa.name}" class="dosa-variety-thumb" loading="lazy" />
+                      </div>
+                    ` : ''}
+                    <div class="dosa-variety-info">
+                      <div class="dosa-variety-header">
+                        <div>
+                          <h4 class="dosa-variety-name">${dosa.name}</h4>
+                          <span class="dosa-grains-tag">🌾 ${dosa.grains}</span>
+                        </div>
+                        <span class="badge badge-gold-sm">${dosa.type}</span>
+                      </div>
+                      <p class="dosa-variety-desc">${dosa.description}</p>
+                      <div class="dosa-accompaniment">
+                        <span class="dosa-acc-icon">✨</span>
+                        <span><strong>Accompaniment:</strong> ${dosa.servedWith}</span>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      <div class="millet-sub-heading reveal-on-scroll">
+        <div class="section-tag" style="justify-content: center;">Sweet Treats & Snacks</div>
+        <h3 class="section-title" style="font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: 0.5rem; text-align: center;">
+          Millet Cookies & Heritage Laddus
+        </h3>
+        <p class="section-subtitle" style="margin: 0 auto 2.5rem; text-align: center; max-width: 600px;">
+          Wholesome jaggery laddus, artisan cookies, and traditional treats crafted from heritage grains.
+        </p>
+      </div>
+
       <div class="millet-cards-grid">
         ${milletData.cards.map(card => `
           <article class="millet-card reveal-on-scroll">
@@ -453,6 +587,8 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="millet-sourcing-banner reveal-on-scroll">${milletData.sourcingNote}</div>
     `;
+
+    initScrollAnimations();
   }
 
   /* ==========================================================================
@@ -607,20 +743,20 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="form-grid">
             <div class="form-group">
               <label for="ic-name" class="form-label">Full Name *</label>
-              <input type="text" id="ic-name" class="form-input" placeholder="e.g. Dhruthi Reddy" required />
-              <div class="form-error-msg" id="err-ic-name">Please enter your full name.</div>
+              <input type="text" id="ic-name" class="form-input" placeholder="e.g. Dhruthi Reddy" required aria-required="true" aria-describedby="err-ic-name" />
+              <div class="form-error-msg" id="err-ic-name" role="alert">Please enter your full name.</div>
             </div>
 
             <div class="form-group">
               <label for="ic-email" class="form-label">Email Address *</label>
-              <input type="email" id="ic-email" class="form-input" placeholder="name@example.com" required />
-              <div class="form-error-msg" id="err-ic-email">Please enter a valid email address.</div>
+              <input type="email" id="ic-email" class="form-input" placeholder="name@example.com" required aria-required="true" aria-describedby="err-ic-email" />
+              <div class="form-error-msg" id="err-ic-email" role="alert">Please enter a valid email address.</div>
             </div>
 
             <div class="form-group full-width">
               <label for="ic-city" class="form-label">Your Area or City *</label>
-              <input type="text" id="ic-city" class="form-input" placeholder="e.g. Bengaluru, Singapore, Chennai" required />
-              <div class="form-error-msg" id="err-ic-city">Please provide your location.</div>
+              <input type="text" id="ic-city" class="form-input" placeholder="e.g. Bengaluru, Singapore, Chennai" required aria-required="true" aria-describedby="err-ic-city" />
+              <div class="form-error-msg" id="err-ic-city" role="alert">Please provide your location.</div>
             </div>
 
             <div class="form-group full-width">
@@ -637,10 +773,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="form-group full-width">
               <label class="checkbox-label" style="align-items: flex-start;">
-                <input type="checkbox" id="ic-consent" required style="margin-top: 4px;" />
+                <input type="checkbox" id="ic-consent" required aria-required="true" aria-describedby="err-ic-consent" style="margin-top: 4px;" />
                 <span>I agree to receive opening updates, event invitations, and story letters from Svādotsava. I understand I can unsubscribe anytime.</span>
               </label>
-              <div class="form-error-msg" id="err-ic-consent">Please accept the consent terms to proceed.</div>
+              <div class="form-error-msg" id="err-ic-consent" role="alert">Please accept the consent terms to proceed.</div>
             </div>
 
             <div class="form-group full-width" style="margin-top: 1rem; text-align: center;">
@@ -658,54 +794,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('inner-circle-form');
     if (!form) return;
 
+    const nameInput = document.getElementById('ic-name');
+    const emailInput = document.getElementById('ic-email');
+    const cityInput = document.getElementById('ic-city');
+    const consentInput = document.getElementById('ic-consent');
+
+    const clearError = (input, errId) => {
+      input.setAttribute('aria-invalid', 'false');
+      const errEl = document.getElementById(errId);
+      if (errEl) errEl.style.display = 'none';
+    };
+
+    nameInput?.addEventListener('input', () => clearError(nameInput, 'err-ic-name'));
+    emailInput?.addEventListener('input', () => clearError(emailInput, 'err-ic-email'));
+    cityInput?.addEventListener('input', () => clearError(cityInput, 'err-ic-city'));
+    consentInput?.addEventListener('change', () => clearError(consentInput, 'err-ic-consent'));
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       let isValid = true;
-
-      const nameInput = document.getElementById('ic-name');
-      const emailInput = document.getElementById('ic-email');
-      const cityInput = document.getElementById('ic-city');
-      const consentInput = document.getElementById('ic-consent');
+      let firstErrorEl = null;
 
       // Reset errors
       document.querySelectorAll('.form-error-msg').forEach(el => el.style.display = 'none');
+      [nameInput, emailInput, cityInput, consentInput].forEach(inp => inp?.setAttribute('aria-invalid', 'false'));
 
       if (!nameInput.value.trim()) {
         document.getElementById('err-ic-name').style.display = 'block';
+        nameInput.setAttribute('aria-invalid', 'true');
         isValid = false;
+        if (!firstErrorEl) firstErrorEl = nameInput;
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(emailInput.value.trim())) {
         document.getElementById('err-ic-email').style.display = 'block';
+        emailInput.setAttribute('aria-invalid', 'true');
         isValid = false;
+        if (!firstErrorEl) firstErrorEl = emailInput;
       }
 
       if (!cityInput.value.trim()) {
         document.getElementById('err-ic-city').style.display = 'block';
+        cityInput.setAttribute('aria-invalid', 'true');
         isValid = false;
+        if (!firstErrorEl) firstErrorEl = cityInput;
       }
 
       if (!consentInput.checked) {
         document.getElementById('err-ic-consent').style.display = 'block';
+        consentInput.setAttribute('aria-invalid', 'true');
         isValid = false;
+        if (!firstErrorEl) firstErrorEl = consentInput;
       }
 
-      if (isValid) {
-        const selectedInterests = Array.from(
-          form.querySelectorAll('input[name="interests"]:checked')
-        ).map(cb => {
-          const label = cb.closest('label')?.textContent?.trim();
-          return label || cb.value;
-        });
+      if (!isValid) {
+        firstErrorEl?.focus();
+        return;
+      }
 
-        const userName = nameInput.value.trim();
-        const userEmail = emailInput.value.trim();
-        const userCity = cityInput.value.trim();
-        const interestList = selectedInterests.length > 0 ? selectedInterests.join(', ') : 'All Café Offerings';
+      const selectedInterests = Array.from(
+        form.querySelectorAll('input[name="interests"]:checked')
+      ).map(cb => {
+        const label = cb.closest('label')?.textContent?.trim();
+        return label || cb.value;
+      });
 
-        const emailSubject = encodeURIComponent(`Svādotsava Inner Circle — ${userName}`);
-        const emailBody = encodeURIComponent(
+      const userName = nameInput.value.trim();
+      const userEmail = emailInput.value.trim();
+      const userCity = cityInput.value.trim();
+      const interestList = selectedInterests.length > 0 ? selectedInterests.join(', ') : 'All Café Offerings';
+
+      const emailSubject = encodeURIComponent(`Svādotsava Inner Circle — ${userName}`);
+      const emailBody = encodeURIComponent(
 `Hi Svādotsava Team,
 
 I would love to join the Inner Circle opening guest-list for your Summer 2029 café opening!
@@ -719,20 +880,19 @@ Looking forward to hearing your updates and opening announcements.
 
 Warm regards,
 ${userName}`
-        );
+      );
 
-        const mailtoUrl = `mailto:${DATA.business.email}?subject=${emailSubject}&body=${emailBody}`;
+      const mailtoUrl = `mailto:${DATA.business.email}?subject=${emailSubject}&body=${emailBody}`;
 
-        showModal(
-          "Your Invitation Request is Ready",
-          `Thank you, ${userName}! We have prepared your opening guest-list request for ${userCity}. Click "Send Email Now" below to send your pre-filled request directly to ${DATA.business.email}.`,
-          "✨",
-          {
-            text: "✉️ Send Email Now",
-            url: mailtoUrl
-          }
-        );
-      }
+      showModal(
+        "Your Invitation Request is Ready",
+        `Thank you, ${userName}! We have prepared your opening guest-list request for ${userCity}. Click "Send Email Now" below to send your pre-filled request directly to ${DATA.business.email}.`,
+        "✨",
+        {
+          text: "✉️ Send Email Now",
+          url: mailtoUrl
+        }
+      );
     });
   }
 

@@ -504,27 +504,56 @@
       ];
 
       const text = lines.join('\n');
-      navigator.clipboard.writeText(text).then(() => {
+      const notifySuccess = () => {
         const toast = document.getElementById('toast-msg');
         if (toast) {
           toast.textContent = "📋 Formula & ingredients copied to clipboard!";
           toast.classList.add('show');
           setTimeout(() => toast.classList.remove('show'), 3000);
         }
-      }).catch(err => {
-        console.error("Clipboard copy failed:", err);
-      });
+      };
+
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        navigator.clipboard.writeText(text).then(notifySuccess).catch(() => {
+          fallbackCopyText(text);
+          notifySuccess();
+        });
+      } else {
+        fallbackCopyText(text);
+        notifySuccess();
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.top = '-9999px';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.warn('Fallback copy command failed:', err);
+      }
+      document.body.removeChild(textarea);
     }
 
     // Event Delegation for Variant Switcher inside toppings pane
     document.addEventListener('click', (e) => {
-      if (e.target && e.target.id === 'switch-veg') {
+      const vegBtn = e.target.closest('#switch-veg');
+      if (vegBtn) {
         currentVariantId = 'm27';
         updateToppingPane();
+        return;
       }
-      if (e.target && e.target.id === 'switch-nonveg') {
+      const nonVegBtn = e.target.closest('#switch-nonveg');
+      if (nonVegBtn) {
         currentVariantId = 'm28';
         updateToppingPane();
+        return;
       }
     });
 

@@ -25,10 +25,10 @@ window.SVADOTSAVA_DATA_GALLERY = [
   },
   {
     "id": "g4",
-    "title": "Butter Croissant",
-    "category": "Bakes",
-    "image": "assets/images/menu/butter_croissant.webp",
-    "caption": "A flaky golden croissant for slow café mornings."
+    "title": "Millet Podi Ghee Dosa",
+    "category": "Millet",
+    "image": "assets/images/millets/millet_podi_dosa.webp",
+    "caption": "Crisp multi-millet crepe dusted with roasted karampodi and golden ghee."
   },
   {
     "id": "g5",
@@ -46,10 +46,10 @@ window.SVADOTSAVA_DATA_GALLERY = [
   },
   {
     "id": "g7",
-    "title": "Cinnamon Roll",
-    "category": "Desserts",
-    "image": "assets/images/menu/cinnamon_roll.webp",
-    "caption": "Soft brioche, cinnamon, and a light glaze."
+    "title": "Heritage Millet Masala Dosa",
+    "category": "Millet",
+    "image": "assets/images/millets/millet_masala_dosa.webp?v=18",
+    "caption": "Golden crisp millet dosa stuffed with spiced potato and served with 3 chutneys."
   },
   {
     "id": "g9",
