@@ -121,19 +121,16 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links">
           <li><a href="#hero" class="nav-link active">Home</a></li>
-          <li><a href="#signature-spotlight" class="nav-link">Signature</a></li>
-          <li><a href="#craft-process" class="nav-link">Process</a></li>
-          <li><a href="#menu" class="nav-link">Café Menu</a></li>
-          <li><a href="#millet-marvels" class="nav-link">Millet Marvels</a></li>
-          <li><a href="#story" class="nav-link">Our Story</a></li>
-          <li><a href="#visit" class="nav-link">Visit</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
+          <li><a href="#menu" class="nav-link">Menu</a></li>
+          <li><a href="#story" class="nav-link">Our Story & Craft</a></li>
+          <li><a href="#gallery" class="nav-link">Gallery</a></li>
+          <li><a href="#visit" class="nav-link">Visit & Hours</a></li>
         </ul>
       </nav>
 
       <div class="header-actions">
         <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle Dark/Light Mode">🌙</button>
-        <a href="#inner-circle" class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">Join Opening List</a>
+        <a href="#visit-rsvp" class="btn btn-secondary" style="padding: 0.45rem 1rem; font-size: 0.85rem;">Join Opening List</a>
 
         <button class="hamburger-btn" aria-label="Toggle navigation menu" aria-expanded="false">
           <span class="hamburger-line"></span>
@@ -148,15 +145,10 @@
   <div class="mobile-nav-drawer" aria-label="Mobile Navigation Drawer">
     <ul class="mobile-nav-links">
       <li><a href="#hero" class="mobile-nav-link">Home</a></li>
-      <li><a href="#signature-spotlight" class="mobile-nav-link">Signature Craft</a></li>
-      <li><a href="#craft-process" class="mobile-nav-link">Our Process</a></li>
       <li><a href="#menu" class="mobile-nav-link">Café Menu</a></li>
-      <li><a href="#millet-marvels" class="mobile-nav-link">Millet Marvels</a></li>
-      <li><a href="#story" class="mobile-nav-link">Our Story</a></li>
-      <li><a href="#visit" class="mobile-nav-link">Visit Us</a></li>
+      <li><a href="#story" class="mobile-nav-link">Our Story & Craft</a></li>
       <li><a href="#gallery" class="mobile-nav-link">Gallery</a></li>
-      <li><a href="#inner-circle" class="mobile-nav-link">Inner Circle</a></li>
-      <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
+      <li><a href="#visit" class="mobile-nav-link">Visit & Sanctuary</a></li>
     </ul>
     <div style="margin-top: auto; text-align: center; color: var(--text-medium);">
       <p style="font-weight: 600; color: var(--heading-color);">Opening Summer 2029</p>
@@ -174,97 +166,34 @@
       </div>
     </section>
 
-    <!-- 1B. Signature Craft Coffee Spotlight (with Artisanal Tasting Notes) -->
-    <section id="signature-spotlight" class="signature-spotlight-section" aria-labelledby="signature-title">
-      <div class="container" id="signature-spotlight-content">
-        <!-- Rendered dynamically by app.js -->
+    <!-- 2. Consolidated Café Menu (Immediately Below Hero) -->
+    <section id="menu" class="menu-section" aria-label="Coffee, tea, millet dosas, sourdough, and café menu">
+      <div class="container" id="menu-content-wrap">
+        <!-- Rendered dynamically by app.js (Chutney Trinity, Search Bar, Categories, Item Cards) -->
       </div>
     </section>
 
-    <!-- 1C. Our Craft Process Timeline (3-Step Heritage Brewing) -->
-    <section id="craft-process" class="craft-process-section" aria-labelledby="process-title">
-      <div class="container" id="craft-process-content">
-        <!-- Rendered dynamically by app.js -->
-      </div>
-    </section>
+    <!-- Backwards compatibility anchor targets -->
+    <div id="millet-marvels" class="anchor-target" aria-hidden="true"></div>
+    <div id="signature-spotlight" class="anchor-target" aria-hidden="true"></div>
+    <div id="craft-process" class="anchor-target" aria-hidden="true"></div>
+    <div id="experience" class="anchor-target" aria-hidden="true"></div>
 
-    <!-- 2. Visually Prominent Opening Announcement -->
-    <section id="announcement" class="announcement-section" aria-label="Grand Opening Announcement">
-      <div class="container" id="announcement-wrap">
-        <!-- Rendered dynamically by app.js -->
-      </div>
-    </section>
-
-    <!-- 3. Experience Categories -->
-    <section id="experience" class="experience-section" aria-label="Experience Categories">
-      <div class="container">
-        <div style="text-align: center;">
-          <div class="section-tag" style="justify-content: center;">Curated Offerings</div>
-          <h2 class="section-title">The Svādotsava Experience</h2>
-          <p class="section-subtitle" style="margin: 0 auto 3.5rem;">
-            Handcrafted coffee and tea, fresh bakes, sourdough toasts, chilled drinks, and relaxed café plates.
-          </p>
-        </div>
-        <div class="experience-grid" id="experience-grid">
-          <!-- Rendered dynamically by app.js -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. Café-first menu -->
-    <section id="menu" class="menu-section" aria-label="Coffee, tea, bakes, and contemporary café menu">
-      <div class="container">
-        <div style="text-align: center;">
-          <div class="section-tag" style="justify-content: center;">Opening Café Collection</div>
-          <h2 class="section-title">The Café Menu</h2>
-          <p class="section-subtitle" style="margin: 0 auto 2.5rem;">
-            Specialty coffee, fragrant teas, chilled drinks, fresh bakes, sourdough toasts, and thoughtful café plates.
-          </p>
-        </div>
-
-        <div class="menu-filter-bar" id="menu-filter-bar" role="tablist" aria-label="Menu Category Filters">
-          <!-- Filter buttons rendered dynamically -->
-        </div>
-
-        <div class="menu-grid" id="menu-grid" role="tabpanel" aria-live="polite" aria-labelledby="menu-tab-all" tabindex="0">
-          <!-- Menu item cards rendered dynamically -->
-        </div>
-
-        <div class="menu-notice-box">
-          ☕ <strong>Opening Menu:</strong> Final café prices will be announced closer to our Summer 2029 opening and listed in Indian Rupees (₹).
-        </div>
-      </div>
-    </section>
-
-    <!-- 4B. Millet Café Collection -->
-    <section id="millet-marvels" class="millet-section" aria-label="Millet café treats">
-      <div class="container" id="millet-content">
-        <!-- Rendered dynamically by app.js -->
-      </div>
-    </section>
-
-    <!-- 5. Our Story Section -->
-    <section id="story" class="story-section" aria-label="Our Story and Philosophy">
+    <!-- 3. Our Story, Living Craft & Sanctuary Atmosphere -->
+    <section id="story" class="story-section" aria-label="Our Story, Philosophy and Craft">
       <div class="container" id="story-content">
         <!-- Rendered dynamically by app.js -->
       </div>
     </section>
 
-    <!-- 10. Visit Us Sanctuary Section -->
-    <section id="visit" class="visit-section" aria-labelledby="visit-title">
-      <div class="container" id="visit-content">
-        <!-- Rendered dynamically by app.js -->
-      </div>
-    </section>
-
-    <!-- Café Gallery -->
+    <!-- 4. Café Gallery -->
     <section id="gallery" class="gallery-section" aria-label="Café Gallery">
       <div class="container">
         <div style="text-align: center;">
           <div class="section-tag" style="justify-content: center;">Visual Journey</div>
-          <h2 class="section-title">A Glimpse into Svādotsava</h2>
+          <h2 class="section-title">Atmosphere & Moments</h2>
           <p class="section-subtitle" style="margin: 0 auto 3rem;">
-            Coffee rituals, fragrant tea, fresh bakes, nourishing grains, and the warm atmosphere we are creating.
+            Living greenery, cast-iron hearths, steaming filter kaapi, and serene sanctuary seating.
           </p>
         </div>
 
@@ -274,27 +203,15 @@
       </div>
     </section>
 
-    <!-- 11. Inner Circle Guest-List Signup -->
-    <section id="inner-circle" class="inner-circle-section" aria-label="Inner Circle Guest List Signup">
-      <div class="container" id="inner-circle-content">
+    <!-- Backwards compatibility anchor targets -->
+    <div id="announcement" class="anchor-target" aria-hidden="true"></div>
+    <div id="inner-circle" class="anchor-target" aria-hidden="true"></div>
+    <div id="contact" class="anchor-target" aria-hidden="true"></div>
+
+    <!-- 5. Visit Us & Opening Sanctuary Section -->
+    <section id="visit" class="visit-section" aria-labelledby="visit-title">
+      <div class="container" id="visit-content">
         <!-- Rendered dynamically by app.js -->
-      </div>
-    </section>
-
-    <!-- 12. Contact and Visit Section -->
-    <section id="contact" class="contact-section" aria-label="Contact Details">
-      <div class="container">
-        <div style="text-align: center;">
-          <div class="section-tag" style="justify-content: center;">Connect With Us</div>
-          <h2 class="section-title">Opening Summer 2029</h2>
-          <p class="section-subtitle" style="margin: 0 auto 3rem;">
-            We look forward to welcoming you for coffee, tea, fresh bakes, and relaxed café moments.
-          </p>
-        </div>
-
-        <div class="contact-grid" id="contact-grid">
-          <!-- Rendered dynamically by app.js -->
-        </div>
       </div>
     </section>
   </main>

@@ -5,26 +5,129 @@ window.SVADOTSAVA_DATA_MENU = {
   "menuCategories": [
     {
       "id": "all",
-      "label": "Café Menu"
+      "label": "All Offerings"
+    },
+    {
+      "id": "millets",
+      "label": "🌾 Millet Dosas & Treats"
     },
     {
       "id": "coffee",
-      "label": "Coffee"
+      "label": "☕ Specialty Coffee"
     },
     {
       "id": "tea",
-      "label": "Tea & Wellness"
+      "label": "🍵 Artisan Teas & Elixirs"
     },
     {
       "id": "cafe",
-      "label": "Bakes & Café Plates"
+      "label": "🍕 Sourdough & Café Plates"
     },
     {
       "id": "desserts",
-      "label": "Desserts"
+      "label": "🍰 Sweets & Bakes"
     }
   ],
   "menuItems": [
+    {
+      "id": "m29",
+      "name": "Millet Podi Ghee Dosa",
+      "category": "millets",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Crisp 24-hr fermented multi-millet crepe generously dusted with house-roasted spiced podi and pure desi ghee. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Cast-Iron Crisp",
+        "Served with 3 Chutneys",
+        "House Special"
+      ],
+      "image": "assets/images/millets/millet_podi_dosa.webp",
+      "imageAlt": "Millet Podi Ghee Dosa dusted with red gunpowder spice and glistening with ghee"
+    },
+    {
+      "id": "m30",
+      "name": "Heritage Millet Masala Dosa",
+      "category": "millets",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Golden crisp multi-millet crepe lined with mild red chili paste and stuffed with spiced potato-onion filling. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Cast-Iron Crisp",
+        "Served with 3 Chutneys",
+        "Chef Signature"
+      ],
+      "image": "assets/images/millets/millet_masala_dosa.webp?v=18",
+      "imageAlt": "Heritage Millet Masala Dosa with spiced potato filling and three chutneys"
+    },
+    {
+      "id": "m31",
+      "name": "Artisanal Millet Plain Dosa",
+      "category": "millets",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Paper-thin, golden multi-millet crepe cooked with cold-pressed sesame oil or butter. Light, airy, and served with Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Gluten-Friendly",
+        "Served with 3 Chutneys"
+      ],
+      "image": "assets/images/millets/millet_plain_dosa.webp",
+      "imageAlt": "Artisanal Millet Plain Dosa folded into a golden crispy roll with trio of chutneys"
+    },
+    {
+      "id": "m32",
+      "name": "Heritage Millet Set Dosa",
+      "category": "millets",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Set of 3 soft, fluffy, golden-spotted spongy multi-millet dosas served with fresh white butter and the trio of Tamato, Ground Nut, and Pudina chutneys.",
+      "badges": [
+        "Vegetarian",
+        "Set of 3 Soft Dosas",
+        "Served with 3 Chutneys",
+        "House Special"
+      ],
+      "image": "assets/images/millets/millet_set_dosa.webp",
+      "imageAlt": "Heritage Millet Set Dosa stack with butter and three chutneys"
+    },
+    {
+      "id": "m33",
+      "name": "Ragi & Palm Jaggery Laddu",
+      "category": "millets",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Earthy, comforting ragi laddus rolled with cold-pressed desi ghee, mineral-rich palm jaggery, and a touch of aromatic cardamom.",
+      "badges": [
+        "Vegetarian",
+        "Naturally Sweetened",
+        "Heritage Treat"
+      ],
+      "image": "assets/images/millets/ragi_laddu.webp",
+      "imageAlt": "Ragi laddus presented on a traditional copper tray"
+    },
+    {
+      "id": "m34",
+      "name": "Foxtail Millet Festive Laddu",
+      "category": "millets",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Soft, fragrant laddus crafted with the delicate richness of foxtail millet flour, pure desi ghee, and golden roasted cashews.",
+      "badges": [
+        "Vegetarian",
+        "Naturally Sweetened",
+        "Festive Special"
+      ],
+      "image": "assets/images/millets/foxtail_millet_laddu.webp",
+      "imageAlt": "Foxtail millet laddus presented on a brass platter"
+    },
     {
       "id": "m9",
       "name": "South Indian Filter Coffee",
@@ -35,39 +138,11 @@ window.SVADOTSAVA_DATA_MENU = {
       "description": "Traditional chicory-infused dark roast decoction frothed high with hot cream milk in a classic brass dabarah.",
       "badges": [
         "Vegetarian",
-        "House Special"
+        "House Special",
+        "Single Origin"
       ],
       "image": "assets/images/menu/classic_filter_coffee.webp",
       "imageAlt": "Freshly brewed coffee in a ceramic cup"
-    },
-    {
-      "id": "m10",
-      "name": "Masala Tea",
-      "category": "tea",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Robust estate tea simmered slowly with crushed fresh ginger, green cardamom, cloves, and whole black pepper.",
-      "badges": [
-        "Vegetarian"
-      ],
-      "image": "assets/images/menu/masala_tea.webp",
-      "imageAlt": "Aromatic spiced masala chai tea"
-    },
-    {
-      "id": "m11",
-      "name": "Golden Turmeric Latte",
-      "category": "tea",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Steamed oat or farm milk whisked with Lakadong wild turmeric, ginger extract, black pepper, and palm jaggery.",
-      "badges": [
-        "Vegan Option",
-        "Wellness"
-      ],
-      "image": "assets/images/menu/turmeric_latte.webp",
-      "imageAlt": "Golden turmeric milk latte topped with edible spice dust"
     },
     {
       "id": "m12",
@@ -78,7 +153,8 @@ window.SVADOTSAVA_DATA_MENU = {
       "priceDisplay": "₹—",
       "description": "Intense single-origin Arabica extraction featuring dark chocolate notes and silky amber crema.",
       "badges": [
-        "Vegan"
+        "Vegan",
+        "Single Origin"
       ],
       "image": "assets/images/menu/espresso.webp",
       "imageAlt": "Single shot espresso in glass cup"
@@ -104,12 +180,12 @@ window.SVADOTSAVA_DATA_MENU = {
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Smooth single-origin espresso harmonized with silky steamed milk for a gentle coffee experience.",
+      "description": "Smooth single-origin espresso enveloped in silky steamed whole milk with delicate pour art.",
       "badges": [
         "Vegetarian"
       ],
       "image": "assets/images/menu/latte.webp",
-      "imageAlt": "Creamy caffe latte with rosetta foam design"
+      "imageAlt": "Cafe latte with delicate leaf latte art"
     },
     {
       "id": "m15",
@@ -118,115 +194,43 @@ window.SVADOTSAVA_DATA_MENU = {
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Double espresso shaken over ice with organic cold milk, palm sugar, and vanilla cream.",
+      "description": "Chilled slow-drip coffee shaken vigorously over ice with creamy whole milk and raw cane syrup.",
       "badges": [
-        "Vegetarian"
+        "Vegetarian",
+        "Chilled"
       ],
       "image": "assets/images/menu/classic_cold_coffee.webp",
-      "imageAlt": "Tall glass of iced cold coffee with creamy top"
+      "imageAlt": "Chilled iced coffee in tall glass with coffee beans"
     },
     {
-      "id": "m20",
-      "name": "Banana Walnut Muffin",
-      "category": "desserts",
+      "id": "m10",
+      "name": "Masala Tea",
+      "category": "tea",
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Moist whole-wheat muffin baked with naturally sweet ripe bananas, nutmeg, and crunchy roasted walnuts.",
+      "description": "Robust estate tea simmered slowly with crushed fresh ginger, green cardamom, cloves, and whole black pepper.",
       "badges": [
         "Vegetarian",
-        "Contains Nuts"
+        "Estate Grown"
       ],
-      "image": "assets/images/menu/banana_muffin.webp",
-      "imageAlt": "Banana walnut muffin with textured top"
+      "image": "assets/images/menu/masala_tea.webp",
+      "imageAlt": "Aromatic spiced masala chai tea"
     },
     {
-      "id": "m21",
-      "name": "Fudgy Brownie",
-      "category": "desserts",
+      "id": "m11",
+      "name": "Golden Turmeric Latte",
+      "category": "tea",
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Rich dark cocoa brownie with a crackly top crust and dense, melty chocolate center.",
+      "description": "Steamed oat or farm milk whisked with Lakadong wild turmeric, ginger extract, black pepper, and palm jaggery.",
       "badges": [
-        "Vegetarian",
-        "Contains Dairy"
+        "Vegan Option",
+        "Wellness"
       ],
-      "image": "assets/images/menu/fudgy_brownie.webp",
-      "imageAlt": "Fudgy chocolate brownie square"
-    },
-    {
-      "id": "m22",
-      "name": "Avocado Toast",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Thick slice of toasted sourdough topped with smashed Hass avocado, microgreens, lime, and dukkah seed crunch.",
-      "badges": [
-        "Vegan"
-      ],
-      "image": "assets/images/menu/avocado_toast.webp",
-      "imageAlt": "Artisanal avocado toast topped with microgreens"
-    },
-    {
-      "id": "m23",
-      "name": "Mushroom & Truffle Toast",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Wild oyster and button mushrooms sautéed in herbs, finished with white truffle oil over rustic sourdough.",
-      "badges": [
-        "Vegetarian"
-      ],
-      "image": "assets/images/menu/mushroom_toast.webp",
-      "imageAlt": "Sautéed mushroom and truffle oil on toasted sourdough"
-    },
-    {
-      "id": "m24",
-      "name": "Mango Lassi",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Chilled creamy cultured yogurt blended with sweet Alphonso mango puree and ground green cardamom.",
-      "badges": [
-        "Vegetarian",
-        "Contains Dairy"
-      ],
-      "image": "assets/images/menu/mango_lassi.webp",
-      "imageAlt": "Glass of golden mango lassi topped with saffron strand"
-    },
-    {
-      "id": "m25",
-      "name": "Garden Millet Salad Bowl",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Mixed greens, cucumber, cherry tomatoes, roasted chickpeas, avocado, carrots, warm millet, and toasted seeds with herb dressing.",
-      "badges": [
-        "Vegetarian",
-        "High Fiber"
-      ],
-      "image": "assets/images/menu/veg_millet_salad_bowl.webp",
-      "imageAlt": "Vegetarian salad bowl with millet, greens, avocado, chickpeas, and vegetables"
-    },
-    {
-      "id": "m26",
-      "name": "Grilled Chicken Millet Bowl",
-      "category": "cafe",
-      "priceText": "Price coming soon",
-      "currencySymbol": "₹",
-      "priceDisplay": "₹—",
-      "description": "Herb-grilled chicken, warm millet, mixed greens, roasted vegetables, cucumber, tomatoes, avocado, and yogurt-herb dressing.",
-      "badges": [
-        "Non-Vegetarian",
-        "High Protein"
-      ],
-      "image": "assets/images/menu/grilled_chicken_millet_bowl.webp",
-      "imageAlt": "Grilled chicken millet bowl with greens, roasted vegetables, avocado, and herb dressing"
+      "image": "assets/images/menu/turmeric_latte.webp",
+      "imageAlt": "Golden turmeric milk latte topped with edible spice dust"
     },
     {
       "id": "m27",
@@ -235,14 +239,14 @@ window.SVADOTSAVA_DATA_MENU = {
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Hand-stretched thin crust topped with tomato sauce, mozzarella, roasted peppers, mushrooms, cherry tomatoes, olives, onion, and basil.",
+      "description": "Naturally fermented sourdough crust topped with San Marzano tomatoes, fresh buffalo mozzarella, bell peppers, zucchini, kalamata olives, and fresh basil.",
       "badges": [
         "Vegetarian",
-        "Contains Dairy",
+        "Woodfire Hearth",
         "Recipe Guide Available"
       ],
       "image": "assets/images/menu/garden_veg_pizza.webp",
-      "imageAlt": "Vegetarian pizza with roasted peppers, mushrooms, tomatoes, olives, onion, and basil",
+      "imageAlt": "Garden vegetable sourdough pizza with fresh mozzarella and basil",
       "hasRecipe": true,
       "recipeId": "sourdough-pizza"
     },
@@ -253,10 +257,10 @@ window.SVADOTSAVA_DATA_MENU = {
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Hand-stretched thin crust with tomato sauce, mozzarella, roasted tandoori chicken, red onion, bell pepper, coriander, and yogurt drizzle.",
+      "description": "Hand-stretched sourdough crust with spiced tomato sauce, mozzarella, clay-oven roasted tandoori chicken, pickled red onion, bell pepper, and fresh coriander.",
       "badges": [
         "Non-Vegetarian",
-        "Contains Dairy",
+        "Woodfire Hearth",
         "Recipe Guide Available"
       ],
       "image": "assets/images/menu/tandoori_chicken_pizza.webp",
@@ -265,70 +269,111 @@ window.SVADOTSAVA_DATA_MENU = {
       "recipeId": "sourdough-pizza"
     },
     {
-      "id": "m29",
-      "name": "Millet Podi Ghee Dosa",
+      "id": "m22",
+      "name": "Avocado Toast",
       "category": "cafe",
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Crisp 24-hr fermented multi-millet crepe generously dusted with house-roasted spiced podi and pure desi ghee. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "description": "Toasted sourdough bread topped with creamy smashed avocado, lime juice, red chili flakes, toasted pumpkin seeds, and a drizzle of extra virgin olive oil.",
       "badges": [
-        "Vegetarian",
-        "Contains Dairy",
-        "Served with 3 Chutneys",
-        "Millet Marvel"
+        "Vegan",
+        "Artisanal Sourdough"
       ],
-      "image": "assets/images/millets/millet_podi_dosa.webp",
-      "imageAlt": "Millet Podi Ghee Dosa dusted with red gunpowder spice and glistening with ghee"
+      "image": "assets/images/menu/avocado_toast.webp",
+      "imageAlt": "Avocado toast with seeds on rustic sourdough slice"
     },
     {
-      "id": "m30",
-      "name": "Heritage Millet Masala Dosa",
+      "id": "m23",
+      "name": "Mushroom & Truffle Toast",
       "category": "cafe",
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Golden crisp multi-millet crepe lined with mild red chili paste and stuffed with spiced potato-onion filling. Served with Tamato, Ground Nut, and Pudina chutneys.",
+      "description": "Sautéed wild button and cremini mushrooms in herb butter on toasted country sourdough, finished with white truffle oil and microgreens.",
       "badges": [
         "Vegetarian",
-        "Served with 3 Chutneys",
-        "Millet Marvel"
+        "Artisanal Sourdough"
       ],
-      "image": "assets/images/millets/millet_masala_dosa.webp?v=18",
-      "imageAlt": "Heritage Millet Masala Dosa with spiced potato filling and three chutneys"
+      "image": "assets/images/menu/mushroom_toast.webp",
+      "imageAlt": "Warm mushroom toast with thyme and microgreens"
     },
     {
-      "id": "m31",
-      "name": "Artisanal Millet Plain Dosa",
+      "id": "m24",
+      "name": "Mango Lassi",
       "category": "cafe",
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Paper-thin, golden multi-millet crepe cooked with cold-pressed sesame oil or butter. Light, airy, and served with Tamato, Ground Nut, and Pudina chutneys.",
+      "description": "Creamy yogurt drink blended with sweet Alphonso mango pulp, a whisper of green cardamom, and garnished with crushed pistachios.",
       "badges": [
         "Vegetarian",
-        "Served with 3 Chutneys",
-        "Millet Marvel"
+        "Chilled"
       ],
-      "image": "assets/images/millets/millet_plain_dosa.webp",
-      "imageAlt": "Artisanal Millet Plain Dosa folded into a golden crispy roll with trio of chutneys"
+      "image": "assets/images/menu/mango_lassi.webp",
+      "imageAlt": "Chilled golden mango lassi in ceramic glass"
     },
     {
-      "id": "m32",
-      "name": "Heritage Millet Set Dosa",
+      "id": "m25",
+      "name": "Garden Millet Salad Bowl",
       "category": "cafe",
       "priceText": "Price coming soon",
       "currencySymbol": "₹",
       "priceDisplay": "₹—",
-      "description": "Set of 3 soft, fluffy, golden-spotted spongy multi-millet dosas served with fresh white butter and the trio of Tamato, Ground Nut, and Pudina chutneys.",
+      "description": "Warm foxtail and barnyard millets with crisp cucumber, cherry tomatoes, baby spinach, avocado, and toasted sunflower seeds in a lemon-herb dressing.",
+      "badges": [
+        "Vegan",
+        "Gluten-Friendly",
+        "Superfood"
+      ],
+      "image": "assets/images/menu/veg_millet_salad_bowl.webp",
+      "imageAlt": "Colorful garden salad bowl with foxtail millet and fresh vegetables"
+    },
+    {
+      "id": "m26",
+      "name": "Grilled Chicken Millet Bowl",
+      "category": "cafe",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Herb-marinated grilled chicken breast served over warm seasoned foxtail millet, roasted zucchini, bell peppers, and a drizzle of tahini sauce.",
+      "badges": [
+        "Non-Vegetarian",
+        "Gluten-Friendly",
+        "High-Protein"
+      ],
+      "image": "assets/images/menu/grilled_chicken_millet_bowl.webp",
+      "imageAlt": "Grilled chicken breast over foxtail millet with roasted vegetables"
+    },
+    {
+      "id": "m20",
+      "name": "Banana Walnut Muffin",
+      "category": "desserts",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Freshly baked moist muffin loaded with ripe Cavendish bananas, crunchy toasted walnuts, and a hint of warm cinnamon.",
       "badges": [
         "Vegetarian",
-        "Set of 3 Dosas",
-        "Served with 3 Chutneys",
-        "Millet Marvel"
+        "Fresh Baked"
       ],
-      "image": "assets/images/millets/millet_set_dosa.webp",
-      "imageAlt": "Heritage Millet Set Dosa stack with butter and three chutneys"
+      "image": "assets/images/menu/banana_muffin.webp",
+      "imageAlt": "Golden banana walnut muffin fresh from the oven"
+    },
+    {
+      "id": "m21",
+      "name": "Fudgy Brownie",
+      "category": "desserts",
+      "priceText": "Price coming soon",
+      "currencySymbol": "₹",
+      "priceDisplay": "₹—",
+      "description": "Decadent dark chocolate brownie with a crinkly shiny top and a rich, melt-in-mouth chewy center.",
+      "badges": [
+        "Vegetarian",
+        "House Special"
+      ],
+      "image": "assets/images/menu/fudgy_brownie.webp",
+      "imageAlt": "Rich fudgy dark chocolate brownie square"
     }
   ]
 };

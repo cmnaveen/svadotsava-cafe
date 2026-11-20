@@ -1,14 +1,18 @@
 /**
  * Svādotsava - Core Application Logic & Interactive Features
  * ------------------------------------------------------------------
- * Renders the café experience, menu, story, gallery, opening list,
- * mobile navigation, form validation, and accessible interactions.
+ * Renders the streamlined café experience:
+ * 1. Hero Introduction
+ * 2. Unified Café & Dining Menu (with Chutney Trinity & live search)
+ * 3. Our Story, Living Craft & Sanctuary Spaces
+ * 4. Atmosphere & Gallery
+ * 5. Visit Sanctuary, Opening Status & Opening Guest List
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   const DATA = window.SVADOTSAVA_DATA;
   if (!DATA) {
-    console.error("Svādotsava data not found. Ensure data.js is loaded first.");
+    console.error("Svādotsava data not found. Ensure data files are loaded first.");
     return;
   }
 
@@ -24,23 +28,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialization
   initHeader();
   renderHero(DATA.hero);
-  renderSignatureSpotlight(DATA.signatureSpotlight);
-  renderCraftProcess(DATA.craftProcess);
-  renderAnnouncement(DATA.announcement);
-  renderExperiences(DATA.experiences);
-  renderStory(DATA.story);
   renderMenu(DATA.menuCategories, DATA.menuItems);
-  renderMilletMarvels(DATA.milletMarvels);
-  renderVisitSanctuary(DATA.visitSanctuary);
+  renderStory(DATA.story, DATA.signatureSpotlight, DATA.craftProcess, DATA.experiences);
   renderGallery(DATA.gallery);
-  renderInnerCircle(DATA.innerCircle);
-  renderContact(DATA.business);
+  renderVisitSanctuary(DATA.visitSanctuary, DATA.announcement, DATA.innerCircle, DATA.business);
   renderFooter(DATA.business);
   
   initScrollAnimations();
   initLightbox(DATA.gallery);
   initFormValidation();
   initThemeSwitcher();
+  initHashHandling();
 
   /* ==========================================================================
      Theme Switcher & Light/Dark Mode Logic
@@ -135,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollPos = (window.scrollY || window.pageYOffset || 0) + 160;
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
-    const sections = Array.from(document.querySelectorAll('section[id]'));
+    const sectionIds = ['hero', 'menu', 'story', 'gallery', 'visit'];
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
     if (!sections.length) return;
 
     let currentSectionId = '';
@@ -151,22 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.scrollY < 80) {
       currentSectionId = 'hero';
     } else if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 50)) {
-      currentSectionId = 'contact';
+      currentSectionId = 'visit';
     }
 
     if (!currentSectionId) return;
 
-    // Map intermediate sections to primary nav links
-    const sectionToNavMap = {
-      'announcement': 'craft-process',
-      'experience': 'craft-process',
-      'gallery': 'visit',
-      'inner-circle': 'visit'
-    };
-    const activeHeaderId = sectionToNavMap[currentSectionId] || currentSectionId;
-
     navLinks.forEach(link => {
-      const isActive = link.getAttribute('href') === `#${activeHeaderId}`;
+      const isActive = link.getAttribute('href') === `#${currentSectionId}`;
       link.classList.toggle('active', isActive);
       if (isActive) {
         link.setAttribute('aria-current', 'page');
@@ -177,17 +167,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mobileLinks.forEach(link => {
       const href = link.getAttribute('href');
-      const isMobileActive = href === `#${currentSectionId}` || href === `#${activeHeaderId}`;
+      const isMobileActive = href === `#${currentSectionId}`;
       link.classList.toggle('active', isMobileActive);
     });
   }
 
   /* ==========================================================================
-     2. Hero & Announcement Rendering
+     2. Hero Rendering
      ========================================================================== */
   function renderHero(heroData) {
     const container = document.getElementById('hero-content');
-    if (!container) return;
+    if (!container || !heroData) return;
 
     container.innerHTML = `
       <div class="hero-grid">
@@ -202,8 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </h2>
           <p class="hero-intro">${heroData.intro}</p>
           <div class="hero-ctas">
-            <a href="#menu" class="btn btn-primary">${heroData.primaryBtn}</a>
-            <a href="#inner-circle" class="btn btn-secondary">${heroData.secondaryBtn}</a>
+            <a href="#menu" class="btn btn-primary">${heroData.primaryBtn || 'Explore Menu'}</a>
+            <a href="#visit" class="btn btn-secondary">${heroData.secondaryBtn || 'Plan Your Visit'}</a>
           </div>
         </div>
         <div class="hero-image-wrap reveal-on-scroll">
@@ -216,195 +206,115 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
       </div>
-      <a class="scroll-cue" href="#signature-spotlight" aria-label="Scroll to signature craft coffee">
+      <a class="scroll-cue" href="#menu" aria-label="Scroll to café menu">
         <span class="scroll-cue-dot" aria-hidden="true"></span>
       </a>
     `;
   }
 
-  function renderSignatureSpotlight(spotlightData) {
-    const container = document.getElementById('signature-spotlight-content');
-    if (!container || !spotlightData) return;
-
-    container.innerHTML = `
-      <div class="signature-spotlight-grid">
-        <div class="signature-image-col reveal-on-scroll">
-          <figure class="signature-figure">
-            <img src="${spotlightData.image}" alt="${spotlightData.imageAlt}" loading="lazy" />
-            <figcaption class="signature-badge">Craft Pour · Brass Filter</figcaption>
-          </figure>
-        </div>
-        <div class="signature-copy-col reveal-on-scroll">
-          <div class="section-kicker">${spotlightData.kicker}</div>
-          <h2 class="section-title signature-title" id="signature-title">${spotlightData.title}</h2>
-          <p class="signature-desc">${spotlightData.description}</p>
-          <dl class="tasting-notes-grid" aria-label="Signature coffee tasting notes">
-            ${(spotlightData.tastingNotes || []).map(note => `
-              <div class="tasting-note-item">
-                <dt class="tasting-note-label">${note.dt}</dt>
-                <dd class="tasting-note-val">${note.dd}</dd>
-              </div>
-            `).join('')}
-          </dl>
-          <div class="signature-actions">
-            <a href="#menu" class="btn btn-primary">${spotlightData.primaryBtn}</a>
-            <a href="#craft-process" class="btn btn-secondary">${spotlightData.secondaryBtn}</a>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderCraftProcess(processData) {
-    const container = document.getElementById('craft-process-content');
-    if (!container || !processData) return;
-
-    container.innerHTML = `
-      <div class="craft-process-grid">
-        <div class="craft-process-art-col reveal-on-scroll">
-          <div class="craft-process-art-frame">
-            <img src="${processData.image}" alt="${processData.imageAlt}" loading="lazy" />
-          </div>
-          <div class="craft-process-quote">
-            “Patience turns shade-grown beans and heirloom grains into celebrated everyday rituals.”
-          </div>
-        </div>
-        <div class="craft-process-copy-col reveal-on-scroll">
-          <div class="section-kicker">${processData.kicker}</div>
-          <h2 class="section-title craft-process-title" id="process-title">${processData.title}</h2>
-          <ol class="craft-process-steps">
-            ${(processData.steps || []).map(st => `
-              <li class="craft-step-item">
-                <span class="craft-step-number" aria-hidden="true">${st.step}</span>
-                <div class="craft-step-body">
-                  <h3 class="craft-step-title">${st.title}</h3>
-                  <p class="craft-step-desc">${st.description}</p>
-                </div>
-              </li>
-            `).join('')}
-          </ol>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderAnnouncement(annData) {
-    const container = document.getElementById('announcement-wrap');
-    if (!container) return;
-
-    container.innerHTML = `
-      <div class="announcement-card reveal-on-scroll">
-        <div class="announcement-header">
-          <div>
-            <span class="badge badge-gold" style="margin-bottom: 0.5rem;">${annData.badge}</span>
-            <h2 class="announcement-title">${annData.title}</h2>
-          </div>
-          <a href="#inner-circle" class="btn btn-gold">Join Opening Guest List</a>
-        </div>
-        <p style="font-size: 1.1rem; opacity: 0.9; max-width: 680px;">${annData.subtitle}</p>
-        <div class="announcement-grid">
-          <div class="announcement-item">
-            <div class="announcement-icon">📍</div>
-            <div>
-              <div class="announcement-label">Location</div>
-              <div class="announcement-val">${annData.locationText}</div>
-            </div>
-          </div>
-          <div class="announcement-item">
-            <div class="announcement-icon">📅</div>
-            <div>
-              <div class="announcement-label">Opening Timeline</div>
-              <div class="announcement-val">${annData.dateText}</div>
-            </div>
-          </div>
-          <div class="announcement-item">
-            <div class="announcement-icon">✉️</div>
-            <div>
-              <div class="announcement-label">Inquiries</div>
-              <div class="announcement-val">${annData.emailText}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
   /* ==========================================================================
-     3. Experience Categories & Story
-     ========================================================================== */
-  function renderExperiences(experiences) {
-    const grid = document.getElementById('experience-grid');
-    if (!grid) return;
-
-    grid.innerHTML = experiences.map(item => `
-      <div class="experience-card reveal-on-scroll">
-        <div class="experience-img-wrap">
-          <img src="${item.image}" alt="${item.imageAlt}" loading="lazy" />
-        </div>
-        <div class="experience-content">
-          <h3 class="experience-title">${item.title}</h3>
-          <div class="experience-subtitle">${item.subtitle}</div>
-          <p class="experience-desc">${item.description}</p>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderStory(storyData) {
-    const container = document.getElementById('story-content');
-    if (!container) return;
-
-    container.innerHTML = `
-      <div class="story-grid">
-        <div class="story-text-wrap reveal-on-scroll">
-          <div class="section-tag">Philosophy & Vision</div>
-          <h2 class="section-title">${storyData.title}</h2>
-          <div class="story-subtitle" style="font-size: 1.25rem; font-weight: 600; color: var(--accent-muted-gold); margin-bottom: 1.25rem;">
-            ${storyData.subtitle}
-          </div>
-          <blockquote class="story-quote">${storyData.quote}</blockquote>
-          ${storyData.paragraphs.map(p => `<p class="story-text">${p}</p>`).join('')}
-          <ul class="story-highlights">
-            ${storyData.highlightPoints.map(pt => `
-              <li class="story-highlight-item">
-                <span class="story-highlight-icon">✓</span>
-                <span>${pt}</span>
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-        <div class="story-image-wrap reveal-on-scroll">
-          <div class="story-img-frame">
-            <img src="${storyData.image}" alt="${storyData.imageAlt}" loading="lazy" />
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  /* ==========================================================================
-     4. Café Menu Filters
+     3. Café Menu Rendering (Unified with Chutney Trinity & Live Search)
      ========================================================================== */
   function renderMenu(categories, items) {
+    const container = document.getElementById('menu-content-wrap');
+    if (!container) return;
+
+    container.innerHTML = `
+      <div style="text-align: center;">
+        <div class="section-tag" style="justify-content: center;">Opening Café Collection</div>
+        <h2 class="section-title">The Café & Dining Menu</h2>
+        <p class="section-subtitle" style="margin: 0 auto 2rem; max-width: 650px;">
+          Specialty coffee, fragrant teas, cast-iron millet dosas with fresh chutney trinity, sourdough pizzas, and wholesome treats.
+        </p>
+      </div>
+
+      <!-- The Chutney Trinity Showcase -->
+      <div class="menu-chutney-banner reveal-on-scroll">
+        <div class="chutney-trinity-card menu-chutney-card">
+          <div class="menu-chutney-header">
+            <span class="menu-chutney-badge">🌾 Heritage Craft Accompaniment</span>
+            <h3 class="menu-chutney-title">The Chutney Trinity</h3>
+            <p class="menu-chutney-sub">
+              Freshly stone-ground daily in small batches · Accompanying all our cast-iron heritage millet dosas
+            </p>
+          </div>
+          <div class="chutney-trinity-grid menu-chutney-horizontal">
+            <div class="chutney-item">
+              <div class="chutney-icon-wrap" aria-hidden="true">🍅</div>
+              <div class="chutney-text">
+                <strong class="chutney-name">Tamato Chutney</strong>
+                <span class="chutney-label">Zesty & Tangy</span>
+                <p class="chutney-desc">Ripe vine tomatoes, brown mustard seeds, roasted dal & crisp curry leaves.</p>
+              </div>
+            </div>
+            <div class="chutney-item">
+              <div class="chutney-icon-wrap" aria-hidden="true">🥜</div>
+              <div class="chutney-text">
+                <strong class="chutney-name">Ground Nut Chutney</strong>
+                <span class="chutney-label">Creamy & Nutty</span>
+                <p class="chutney-desc">Slow-roasted peanuts, green chilies, cumin & fresh ginger.</p>
+              </div>
+            </div>
+            <div class="chutney-item">
+              <div class="chutney-icon-wrap" aria-hidden="true">🌿</div>
+              <div class="chutney-text">
+                <strong class="chutney-name">Pudina Chutney</strong>
+                <span class="chutney-label">Herbaceous & Fresh</span>
+                <p class="chutney-desc">Hand-picked estate mint, fresh coriander, roasted chana & touch of lime.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Search Bar -->
+      <div class="menu-search-wrap">
+        <span class="menu-search-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="menu-search-input" class="menu-search-input" placeholder="Search dishes, drinks, or ingredients (e.g. Masala Dosa, Filter Coffee)..." aria-label="Search menu items" />
+        <button type="button" id="menu-search-clear" class="menu-search-clear" aria-label="Clear search" style="display: none;">✕</button>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="menu-filter-bar" id="menu-filter-bar" role="tablist" aria-label="Menu Category Filters">
+        ${categories.map(cat => `
+          <button
+            type="button"
+            role="tab"
+            id="menu-tab-${cat.id}"
+            class="menu-filter-btn ${cat.id === state.activeCategory ? 'active' : ''}"
+            data-category="${cat.id}"
+            aria-controls="menu-grid"
+            aria-selected="${cat.id === state.activeCategory}"
+            tabindex="${cat.id === state.activeCategory ? '0' : '-1'}">
+            ${cat.label}
+          </button>
+        `).join('')}
+      </div>
+
+      <!-- Menu Items Grid -->
+      <div class="menu-grid" id="menu-grid" role="tabpanel" aria-live="polite" aria-labelledby="menu-tab-all" tabindex="0">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="menu-notice-box">
+        ☕ <strong>Opening Menu:</strong> Final café prices will be announced closer to our Summer 2029 opening and listed in Indian Rupees (₹).
+      </div>
+    `;
+
     const filterBar = document.getElementById('menu-filter-bar');
-    const menuGrid = document.getElementById('menu-grid');
-    if (!filterBar || !menuGrid) return;
-
-    filterBar.innerHTML = categories.map(cat => `
-      <button
-        type="button"
-        role="tab"
-        id="menu-tab-${cat.id}"
-        class="menu-filter-btn ${cat.id === state.activeCategory ? 'active' : ''}"
-        data-category="${cat.id}"
-        aria-controls="menu-grid"
-        aria-selected="${cat.id === state.activeCategory}"
-        tabindex="${cat.id === state.activeCategory ? '0' : '-1'}">
-        ${cat.label}
-      </button>
-    `).join('');
-
+    const searchInput = document.getElementById('menu-search-input');
+    const searchClear = document.getElementById('menu-search-clear');
     const filterButtons = [...filterBar.querySelectorAll('.menu-filter-btn')];
+
+    let currentSearchQuery = '';
+
+    const applyFilters = () => {
+      renderMenuItems(items, state.activeCategory, currentSearchQuery);
+      if (searchClear) {
+        searchClear.style.display = currentSearchQuery.trim() ? 'block' : 'none';
+      }
+    };
+
     const activateFilter = (btn) => {
       const catId = btn.getAttribute('data-category');
       state.activeCategory = catId;
@@ -416,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
         b.setAttribute('tabindex', isActive ? '0' : '-1');
       });
 
-      renderMenuItems(items, catId);
+      applyFilters();
     };
 
     filterButtons.forEach((btn, index) => {
@@ -435,19 +345,63 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
 
-    renderMenuItems(items, 'all');
+    searchInput?.addEventListener('input', (e) => {
+      currentSearchQuery = e.target.value.toLowerCase().trim();
+      applyFilters();
+    });
+
+    searchClear?.addEventListener('click', () => {
+      searchInput.value = '';
+      currentSearchQuery = '';
+      applyFilters();
+      searchInput.focus();
+    });
+
+    renderMenuItems(items, state.activeCategory, '');
   }
-  function renderMenuItems(items, categoryId) {
+
+  function renderMenuItems(items, categoryId, query = '') {
     const menuGrid = document.getElementById('menu-grid');
     if (!menuGrid) return;
     menuGrid.setAttribute('aria-labelledby', `menu-tab-${categoryId}`);
 
-    const categoryPriority = { coffee: 0, tea: 1, cafe: 2, desserts: 3 };
-    const filteredItems = (categoryId === 'all'
-      ? [...items].sort((a, b) => categoryPriority[a.category] - categoryPriority[b.category])
+    const categoryPriority = { millets: 0, coffee: 1, tea: 2, cafe: 3, desserts: 4 };
+
+    let filtered = (categoryId === 'all'
+      ? [...items].sort((a, b) => (categoryPriority[a.category] ?? 9) - (categoryPriority[b.category] ?? 9))
       : items.filter(item => item.category === categoryId));
 
-    menuGrid.innerHTML = filteredItems.map(item => `
+    if (query) {
+      filtered = filtered.filter(item => {
+        const nameMatch = item.name.toLowerCase().includes(query);
+        const descMatch = item.description.toLowerCase().includes(query);
+        const badgeMatch = (item.badges || []).some(b => b.toLowerCase().includes(query));
+        return nameMatch || descMatch || badgeMatch;
+      });
+    }
+
+    if (filtered.length === 0) {
+      menuGrid.innerHTML = `
+        <div class="menu-empty-state" style="grid-column: 1 / -1;">
+          <div class="menu-empty-icon" aria-hidden="true">🍽️</div>
+          <h3>No dishes found</h3>
+          <p>We couldn't find any items matching "${query}". Try searching for another dish or clear the filter.</p>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-search-empty">
+            Clear Search Filter
+          </button>
+        </div>
+      `;
+      document.getElementById('btn-clear-search-empty')?.addEventListener('click', () => {
+        const input = document.getElementById('menu-search-input');
+        if (input) input.value = '';
+        const searchClear = document.getElementById('menu-search-clear');
+        if (searchClear) searchClear.style.display = 'none';
+        renderMenuItems(items, categoryId, '');
+      });
+      return;
+    }
+
+    menuGrid.innerHTML = filtered.map(item => `
       <div class="menu-card reveal-on-scroll">
         <div class="menu-card-img-wrap">
           <img src="${item.image}" alt="${item.imageAlt}" loading="lazy" />
@@ -470,133 +424,141 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `).join('');
 
-    // Trigger scroll reveal update for newly rendered menu items
     initScrollAnimations();
   }
 
   /* ==========================================================================
-     5. Millet Café Collection
+     4. Our Story, Living Craft & Spaces
      ========================================================================== */
-  function renderMilletMarvels(milletData) {
-    const container = document.getElementById('millet-content');
-    if (!container) return;
-
-    const dosaFeat = milletData.dosaFeature;
+  function renderStory(storyData, spotlightData, processData, experiences) {
+    const container = document.getElementById('story-content');
+    if (!container || !storyData) return;
 
     container.innerHTML = `
-      <div class="millet-heading">
-        <div>
-          <div class="section-tag">Café Grain Collection</div>
-          <h2 class="section-title">${milletData.heading}</h2>
-          <p class="section-subtitle">${milletData.subheading}</p>
-          <p class="millet-intro">${milletData.intro}</p>
-        </div>
-        <img class="millet-hero-image" src="${milletData.image}" alt="${milletData.imageAlt}" loading="lazy" />
-      </div>
-
-      ${dosaFeat ? `
-        <div class="millet-dosa-showcase reveal-on-scroll">
-          <div class="millet-dosa-grid">
-            <div class="millet-dosa-media">
-              <figure class="millet-dosa-figure">
-                <img src="${dosaFeat.image}" alt="${dosaFeat.imageAlt}" loading="lazy" />
-                <figcaption class="millet-dosa-badge">${dosaFeat.badge}</figcaption>
-              </figure>
-
-              <div class="chutney-trinity-card">
-                <div class="chutney-trinity-header">
-                  <span class="chutney-header-icon" aria-hidden="true">🥣</span>
-                  <div>
-                    <h4 class="chutney-trinity-title">${dosaFeat.chutneysTitle}</h4>
-                    <p class="chutney-trinity-sub">Ground fresh daily in small stone batches</p>
-                  </div>
-                </div>
-                <div class="chutney-trinity-grid">
-                  ${dosaFeat.chutneys.map(ch => `
-                    <div class="chutney-item">
-                      <div class="chutney-icon-wrap" aria-hidden="true">${ch.icon}</div>
-                      <div class="chutney-text">
-                        <strong class="chutney-name">${ch.name}</strong>
-                        <span class="chutney-label">${ch.label}</span>
-                        <p class="chutney-desc">${ch.description}</p>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
+      <div class="story-wrapper">
+        <!-- 1. Philosophy & Vision -->
+        <div class="story-grid">
+          <div class="story-text-wrap reveal-on-scroll">
+            <div class="section-tag">Philosophy & Vision</div>
+            <h2 class="section-title">${storyData.title}</h2>
+            <div class="story-subtitle" style="font-size: 1.25rem; font-weight: 600; color: var(--accent-muted-gold); margin-bottom: 1.25rem;">
+              ${storyData.subtitle}
             </div>
-
-            <div class="millet-dosa-content">
-              <div class="section-kicker">Cast-Iron Heritage Crepes</div>
-              <h3 class="millet-dosa-title">${dosaFeat.title}</h3>
-              <p class="millet-dosa-subtitle">${dosaFeat.subtitle}</p>
-              <p class="millet-dosa-desc">${dosaFeat.description}</p>
-
-              <div class="dosa-varieties-list">
-                ${dosaFeat.dosas.map(dosa => `
-                  <div class="dosa-variety-card">
-                    ${dosa.image ? `
-                      <div class="dosa-variety-thumb-wrap">
-                        <img src="${dosa.image}" alt="${dosa.name}" class="dosa-variety-thumb" loading="lazy" />
-                      </div>
-                    ` : ''}
-                    <div class="dosa-variety-info">
-                      <div class="dosa-variety-header">
-                        <div>
-                          <h4 class="dosa-variety-name">${dosa.name}</h4>
-                          <span class="dosa-grains-tag">🌾 ${dosa.grains}</span>
-                        </div>
-                        <span class="badge badge-gold-sm">${dosa.type}</span>
-                      </div>
-                      <p class="dosa-variety-desc">${dosa.description}</p>
-                      <div class="dosa-accompaniment">
-                        <span class="dosa-acc-icon">✨</span>
-                        <span><strong>Accompaniment:</strong> ${dosa.servedWith}</span>
-                      </div>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
+            <blockquote class="story-quote">${storyData.quote}</blockquote>
+            ${storyData.paragraphs.map(p => `<p class="story-text">${p}</p>`).join('')}
+            <ul class="story-highlights">
+              ${storyData.highlightPoints.map(pt => `
+                <li class="story-highlight-item">
+                  <span class="story-highlight-icon">✓</span>
+                  <span>${pt}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
+          <div class="story-image-wrap reveal-on-scroll">
+            <div class="story-img-frame">
+              <img src="${storyData.image}" alt="${storyData.imageAlt}" loading="lazy" />
             </div>
           </div>
         </div>
-      ` : ''}
 
-      <div class="millet-sub-heading reveal-on-scroll">
-        <div class="section-tag" style="justify-content: center;">Sweet Treats & Snacks</div>
-        <h3 class="section-title" style="font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: 0.5rem; text-align: center;">
-          Millet Cookies & Heritage Laddus
-        </h3>
-        <p class="section-subtitle" style="margin: 0 auto 2.5rem; text-align: center; max-width: 600px;">
-          Wholesome jaggery laddus, artisan cookies, and traditional treats crafted from heritage grains.
-        </p>
-      </div>
-
-      <div class="millet-cards-grid">
-        ${milletData.cards.map(card => `
-          <article class="millet-card reveal-on-scroll">
-            <img class="millet-card-image" src="${card.image}" alt="${card.imageAlt}" loading="lazy" />
-            <div class="millet-card-body">
-              <div class="millet-card-icon" aria-hidden="true">${card.icon}</div>
-              <h3 class="millet-card-title">${card.grain}</h3>
-              <p class="millet-card-benefit">${card.benefit}</p>
-              <span class="millet-card-dish">${card.dishPreview}</span>
+        <!-- 2. Signature Craft Coffee & Cast-Iron Spotlight -->
+        ${spotlightData ? `
+          <div class="story-sub-block" id="signature-spotlight-block">
+            <div class="signature-spotlight-grid">
+              <div class="signature-image-col reveal-on-scroll">
+                <figure class="signature-figure">
+                  <img src="${spotlightData.image}" alt="${spotlightData.imageAlt}" loading="lazy" />
+                  <figcaption class="signature-badge">Craft Pour · Brass Filter</figcaption>
+                </figure>
+              </div>
+              <div class="signature-copy-col reveal-on-scroll">
+                <div class="section-kicker">${spotlightData.kicker}</div>
+                <h3 class="section-title signature-title">${spotlightData.title}</h3>
+                <p class="signature-desc">${spotlightData.description}</p>
+                <dl class="tasting-notes-grid" aria-label="Signature coffee tasting notes">
+                  ${(spotlightData.tastingNotes || []).map(note => `
+                    <div class="tasting-note-item">
+                      <dt class="tasting-note-label">${note.dt}</dt>
+                      <dd class="tasting-note-val">${note.dd}</dd>
+                    </div>
+                  `).join('')}
+                </dl>
+                <div class="signature-actions">
+                  <a href="#menu" class="btn btn-primary">${spotlightData.primaryBtn || 'Explore Menu'}</a>
+                </div>
+              </div>
             </div>
-          </article>
-        `).join('')}
-      </div>
-      <div class="millet-sourcing-banner reveal-on-scroll">${milletData.sourcingNote}</div>
-    `;
+          </div>
+        ` : ''}
 
-    initScrollAnimations();
+        <!-- 3. Our 4-Step Heritage Craft Process -->
+        ${processData ? `
+          <div class="story-sub-block" id="craft-process-block">
+            <div class="craft-process-grid">
+              <div class="craft-process-art-col reveal-on-scroll">
+                <div class="craft-process-art-frame">
+                  <img src="${processData.image}" alt="${processData.imageAlt}" loading="lazy" />
+                </div>
+                <div class="craft-process-quote">
+                  “Patience turns shade-grown beans and heirloom grains into celebrated everyday rituals.”
+                </div>
+              </div>
+              <div class="craft-process-copy-col reveal-on-scroll">
+                <div class="section-kicker">${processData.kicker}</div>
+                <h3 class="section-title craft-process-title">${processData.title}</h3>
+                <ol class="craft-process-steps">
+                  ${(processData.steps || []).map(st => `
+                    <li class="craft-step-item">
+                      <span class="craft-step-number" aria-hidden="true">${st.step}</span>
+                      <div class="craft-step-body">
+                        <h4 class="craft-step-title">${st.title}</h4>
+                        <p class="craft-step-desc">${st.description}</p>
+                      </div>
+                    </li>
+                  `).join('')}
+                </ol>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- 4. Sanctuary Spaces & Experience -->
+        ${experiences && experiences.length ? `
+          <div class="story-sub-block" id="experience-block">
+            <div style="text-align: center; margin-bottom: 3rem;">
+              <div class="section-tag" style="justify-content: center;">Atmosphere & Spaces</div>
+              <h3 class="section-title">The Svādotsava Experience</h3>
+              <p class="section-subtitle" style="margin: 0 auto; max-width: 600px;">
+                Spaces crafted with living flora, natural light, terracotta warmth, and quiet community connection.
+              </p>
+            </div>
+            <div class="experience-grid">
+              ${experiences.map(item => `
+                <div class="experience-card reveal-on-scroll">
+                  <div class="experience-img-wrap">
+                    <img src="${item.image}" alt="${item.imageAlt}" loading="lazy" />
+                  </div>
+                  <div class="experience-content">
+                    <h4 class="experience-title">${item.title}</h4>
+                    <div class="experience-subtitle">${item.subtitle}</div>
+                    <p class="experience-desc">${item.description}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
   }
 
   /* ==========================================================================
-     6. Café Gallery & Fullscreen Lightbox
+     5. Gallery Rendering & Lightbox
      ========================================================================== */
   function renderGallery(galleryData) {
     const grid = document.getElementById('gallery-grid');
-    if (!grid) return;
+    if (!grid || !galleryData) return;
 
     grid.innerHTML = galleryData.map((item, index) => `
       <div class="gallery-item reveal-on-scroll" data-index="${index}" tabindex="0" role="button" aria-label="View ${item.title}">
@@ -690,34 +652,157 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     9B. Visit Us Sanctuary Section
+     6. Visit Us, Opening Status & Guest List RSVP
      ========================================================================== */
-  function renderVisitSanctuary(visitData) {
+  function renderVisitSanctuary(visitData, annData, circleData, bizData) {
     const container = document.getElementById('visit-content');
     if (!container || !visitData) return;
 
     container.innerHTML = `
-      <div class="visit-grid">
-        <div class="visit-image-col reveal-on-scroll">
-          <figure class="visit-figure">
-            <img src="${visitData.image}" alt="${visitData.imageAlt}" loading="lazy" />
-          </figure>
-        </div>
-        <div class="visit-copy-col reveal-on-scroll">
-          <div class="section-kicker">${visitData.kicker}</div>
-          <h2 class="section-title visit-title" id="visit-title">${visitData.title}</h2>
-          <p class="visit-desc">${visitData.description}</p>
-          <div class="visit-details-pills">
-            ${(visitData.details || []).map(det => `
-              <div class="visit-detail-pill">
-                <span class="visit-detail-label">${det.label}</span>
-                <span class="visit-detail-val">${det.value}</span>
+      <div class="visit-wrapper">
+        <!-- Opening Status Banner -->
+        ${annData ? `
+          <div class="announcement-card reveal-on-scroll" style="margin-bottom: 3.5rem;">
+            <div class="announcement-header">
+              <div>
+                <span class="badge badge-gold" style="margin-bottom: 0.5rem;">${annData.badge}</span>
+                <h2 class="announcement-title">${annData.title}</h2>
               </div>
-            `).join('')}
+              <a href="#visit-rsvp" class="btn btn-gold">Join Opening Guest List</a>
+            </div>
+            <p style="font-size: 1.1rem; opacity: 0.9; max-width: 680px;">${annData.subtitle}</p>
+            <div class="announcement-grid">
+              <div class="announcement-item">
+                <div class="announcement-icon">📍</div>
+                <div>
+                  <div class="announcement-label">Location</div>
+                  <div class="announcement-val">${annData.locationText}</div>
+                </div>
+              </div>
+              <div class="announcement-item">
+                <div class="announcement-icon">📅</div>
+                <div>
+                  <div class="announcement-label">Opening Timeline</div>
+                  <div class="announcement-val">${annData.dateText}</div>
+                </div>
+              </div>
+              <div class="announcement-item">
+                <div class="announcement-icon">✉️</div>
+                <div>
+                  <div class="announcement-label">Inquiries</div>
+                  <div class="announcement-val">${annData.emailText}</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="visit-actions">
-            <a href="#inner-circle" class="btn btn-primary">${visitData.primaryBtn}</a>
-            <a href="#contact" class="btn btn-secondary">${visitData.secondaryBtn}</a>
+        ` : ''}
+
+        <!-- Main Visit & RSVP Split Grid -->
+        <div class="visit-split-grid">
+          <!-- Left Column: Sanctuary & Visit Details -->
+          <div class="visit-info-card reveal-on-scroll">
+            <div class="section-tag">Sanctuary & Hours</div>
+            <h3 class="section-title" style="font-size: clamp(1.4rem, 2.5vw, 1.95rem); margin-bottom: 1rem;">
+              Plan Your Sanctuary Visit
+            </h3>
+            <p style="color: var(--text-medium); margin-bottom: 1.5rem; line-height: 1.6;">
+              Designed as an urban sanctuary filled with endemic flora, terracotta warmth, and quiet natural light, Svādotsava welcomes you for leisurely filter coffee, crisp millet dosas, and nourishing plates.
+            </p>
+
+            <div class="visit-detail-list">
+              <div class="visit-detail-item">
+                <span class="visit-detail-icon">📍</span>
+                <div>
+                  <strong>Location & Region</strong>
+                  <p>${bizData.location} · ${bizData.address}</p>
+                </div>
+              </div>
+              <div class="visit-detail-item">
+                <span class="visit-detail-icon">⏱️</span>
+                <div>
+                  <strong>Projected Café Hours</strong>
+                  <p>Tuesday – Sunday: 7:00 AM – 10:30 PM (Mondays closed for Roastery craft)</p>
+                </div>
+              </div>
+              <div class="visit-detail-item">
+                <span class="visit-detail-icon">✉️</span>
+                <div>
+                  <strong>General & Media Inquiries</strong>
+                  <p><a href="mailto:${bizData.email}">${bizData.email}</a></p>
+                </div>
+              </div>
+              <div class="visit-detail-item">
+                <span class="visit-detail-icon">📷</span>
+                <div>
+                  <strong>Opening Journey & Stories</strong>
+                  <p><a href="${bizData.instagramUrl}" target="_blank" rel="noopener noreferrer">${bizData.instagramHandle}</a></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="sanctuary-highlights-chips">
+              <span class="chip">🌿 Pet-Friendly Courtyard</span>
+              <span class="chip">🚲 Bicycle Parking</span>
+              <span class="chip">⚡ High-Speed Wi-Fi Workspaces</span>
+              <span class="chip">🌱 100% Organic Waste Composted</span>
+            </div>
+          </div>
+
+          <!-- Right Column: Opening Guest List (Inner Circle) Form -->
+          <div class="inner-circle-card reveal-on-scroll" id="visit-rsvp">
+            <div>
+              <span class="badge badge-gold" style="margin-bottom: 0.75rem;">Exclusive Preview Access</span>
+              <h3 class="section-title" style="font-size: clamp(1.35rem, 2.3vw, 1.85rem); margin-bottom: 0.5rem;">${circleData.title}</h3>
+              <p class="section-subtitle" style="margin: 0 0 1.5rem; max-width: 500px;">${circleData.subtitle}</p>
+            </div>
+
+            <form id="inner-circle-form" novalidate>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="ic-name" class="form-label">Full Name *</label>
+                  <input type="text" id="ic-name" class="form-input" placeholder="e.g. Dhruthi Reddy" required aria-required="true" aria-describedby="err-ic-name" />
+                  <div class="form-error-msg" id="err-ic-name" role="alert">Please enter your full name.</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="ic-email" class="form-label">Email Address *</label>
+                  <input type="email" id="ic-email" class="form-input" placeholder="name@example.com" required aria-required="true" aria-describedby="err-ic-email" />
+                  <div class="form-error-msg" id="err-ic-email" role="alert">Please enter a valid email address.</div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="ic-city" class="form-label">Your Area or City *</label>
+                  <input type="text" id="ic-city" class="form-input" placeholder="e.g. Bengaluru, Singapore, Chennai" required aria-required="true" aria-describedby="err-ic-city" />
+                  <div class="form-error-msg" id="err-ic-city" role="alert">Please provide your location.</div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label">What interests you most? (Select all that apply)</label>
+                  <div class="checkbox-group">
+                    ${(circleData.foodInterests || []).map(interest => `
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="interests" value="${interest.id}" />
+                        <span>${interest.label}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="checkbox-label" style="align-items: flex-start;">
+                    <input type="checkbox" id="ic-consent" required aria-required="true" aria-describedby="err-ic-consent" style="margin-top: 4px;" />
+                    <span>I agree to receive opening updates, preview invitations, and story letters from Svādotsava. I can unsubscribe anytime.</span>
+                  </label>
+                  <div class="form-error-msg" id="err-ic-consent" role="alert">Please accept the consent terms to proceed.</div>
+                </div>
+
+                <div class="form-group full-width" style="margin-top: 1rem; text-align: center;">
+                  <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Join Opening Guest List
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -725,71 +810,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     10. Inner Circle Form & Validation
+     7. Form Validation & Inner Circle Mailto Action
      ========================================================================== */
-  function renderInnerCircle(circleData) {
-    const container = document.getElementById('inner-circle-content');
-    if (!container) return;
-
-    container.innerHTML = `
-      <div class="inner-circle-card reveal-on-scroll">
-        <div style="text-align: center;">
-          <span class="badge badge-gold" style="margin-bottom: 0.75rem;">Exclusive Preview Access</span>
-          <h2 class="section-title" style="margin-bottom: 0.5rem;">${circleData.title}</h2>
-          <p class="section-subtitle" style="margin: 0 auto 2rem; max-width: 580px;">${circleData.subtitle}</p>
-        </div>
-
-        <form id="inner-circle-form" novalidate>
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="ic-name" class="form-label">Full Name *</label>
-              <input type="text" id="ic-name" class="form-input" placeholder="e.g. Dhruthi Reddy" required aria-required="true" aria-describedby="err-ic-name" />
-              <div class="form-error-msg" id="err-ic-name" role="alert">Please enter your full name.</div>
-            </div>
-
-            <div class="form-group">
-              <label for="ic-email" class="form-label">Email Address *</label>
-              <input type="email" id="ic-email" class="form-input" placeholder="name@example.com" required aria-required="true" aria-describedby="err-ic-email" />
-              <div class="form-error-msg" id="err-ic-email" role="alert">Please enter a valid email address.</div>
-            </div>
-
-            <div class="form-group full-width">
-              <label for="ic-city" class="form-label">Your Area or City *</label>
-              <input type="text" id="ic-city" class="form-input" placeholder="e.g. Bengaluru, Singapore, Chennai" required aria-required="true" aria-describedby="err-ic-city" />
-              <div class="form-error-msg" id="err-ic-city" role="alert">Please provide your location.</div>
-            </div>
-
-            <div class="form-group full-width">
-              <label class="form-label">What interests you most? (Select all that apply)</label>
-              <div class="checkbox-group">
-                ${circleData.foodInterests.map(interest => `
-                  <label class="checkbox-label">
-                    <input type="checkbox" name="interests" value="${interest.id}" />
-                    <span>${interest.label}</span>
-                  </label>
-                `).join('')}
-              </div>
-            </div>
-
-            <div class="form-group full-width">
-              <label class="checkbox-label" style="align-items: flex-start;">
-                <input type="checkbox" id="ic-consent" required aria-required="true" aria-describedby="err-ic-consent" style="margin-top: 4px;" />
-                <span>I agree to receive opening updates, event invitations, and story letters from Svādotsava. I understand I can unsubscribe anytime.</span>
-              </label>
-              <div class="form-error-msg" id="err-ic-consent" role="alert">Please accept the consent terms to proceed.</div>
-            </div>
-
-            <div class="form-group full-width" style="margin-top: 1rem; text-align: center;">
-              <button type="submit" class="btn btn-primary" style="width: 100%; max-width: 320px; margin: 0 auto;">
-                Check My Opening Request
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    `;
-  }
-
   function initFormValidation() {
     const form = document.getElementById('inner-circle-form');
     if (!form) return;
@@ -865,18 +887,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const userCity = cityInput.value.trim();
       const interestList = selectedInterests.length > 0 ? selectedInterests.join(', ') : 'All Café Offerings';
 
-      const emailSubject = encodeURIComponent(`Svādotsava Inner Circle — ${userName}`);
+      const emailSubject = encodeURIComponent(`Svādotsava Opening Guest List — ${userName}`);
       const emailBody = encodeURIComponent(
 `Hi Svādotsava Team,
 
-I would love to join the Inner Circle opening guest-list for your Summer 2029 café opening!
+I would love to join the opening guest-list for your Summer 2029 café opening!
 
 • Full Name: ${userName}
 • Email: ${userEmail}
 • Area / City: ${userCity}
 • Interested In: ${interestList}
 
-Looking forward to hearing your updates and opening announcements.
+Looking forward to hearing your opening updates and tasting announcements.
 
 Warm regards,
 ${userName}`
@@ -897,48 +919,11 @@ ${userName}`
   }
 
   /* ==========================================================================
-     11. Contact & Footer Rendering
+     8. Footer Rendering
      ========================================================================== */
-  function renderContact(biz) {
-    const grid = document.getElementById('contact-grid');
-    if (!grid) return;
-
-    grid.innerHTML = `
-      <div class="contact-card reveal-on-scroll">
-        <div class="contact-card-icon">📍</div>
-        <h3 class="contact-card-title">Location</h3>
-        <div class="contact-card-val">${biz.location}</div>
-        <div class="contact-card-sub">${biz.address}</div>
-      </div>
-
-      <div class="contact-card reveal-on-scroll">
-        <div class="contact-card-icon">📅</div>
-        <h3 class="contact-card-title">Opening Status</h3>
-        <div class="contact-card-val">${biz.openingStatus}</div>
-        <div class="contact-card-sub">${biz.exactDate}</div>
-      </div>
-
-      <div class="contact-card reveal-on-scroll">
-        <div class="contact-card-icon">✉️</div>
-        <h3 class="contact-card-title">Email Inquiries</h3>
-        <div class="contact-card-val"><a href="mailto:${biz.email}">${biz.email}</a></div>
-        <div class="contact-card-sub">General & media inquiries</div>
-      </div>
-
-      <div class="contact-card reveal-on-scroll">
-        <div class="contact-card-icon">📷</div>
-        <h3 class="contact-card-title">Instagram</h3>
-        <div class="contact-card-val">
-          <a href="${biz.instagramUrl}" target="_blank" rel="noopener noreferrer">${biz.instagramHandle}</a>
-        </div>
-        <div class="contact-card-sub">Follow our opening journey</div>
-      </div>
-    `;
-  }
-
   function renderFooter(biz) {
     const container = document.getElementById('footer-content');
-    if (!container) return;
+    if (!container || !biz) return;
 
     container.innerHTML = `
       <div class="footer-grid">
@@ -946,7 +931,7 @@ ${userName}`
           <div class="brand-title">${biz.name}</div>
           <div class="brand-tagline">${biz.tagline}</div>
           <p class="footer-brand-desc">
-            A celebration of handcrafted coffee, fragrant tea, fresh bakes, café plates, and warm hospitality.
+            A celebration of handcrafted coffee, fragrant tea, cast-iron millet dosas, fresh stone chutneys, and warm hospitality.
           </p>
         </div>
 
@@ -954,20 +939,17 @@ ${userName}`
           <h4 class="footer-title">Navigation</h4>
           <ul class="footer-links">
             <li><a href="#hero" class="footer-link">Home</a></li>
-            <li><a href="#signature-spotlight" class="footer-link">Signature Craft</a></li>
-            <li><a href="#craft-process" class="footer-link">Our Process</a></li>
             <li><a href="#menu" class="footer-link">Café Menu</a></li>
-            <li><a href="#millet-marvels" class="footer-link">Millet Marvels</a></li>
-            <li><a href="#story" class="footer-link">Our Story</a></li>
-            <li><a href="#visit" class="footer-link">Visit Us</a></li>
+            <li><a href="#story" class="footer-link">Our Story & Craft</a></li>
+            <li><a href="#gallery" class="footer-link">Atmosphere & Gallery</a></li>
+            <li><a href="#visit" class="footer-link">Visit & Hours</a></li>
           </ul>
         </div>
 
         <div>
-          <h4 class="footer-title">Café</h4>
+          <h4 class="footer-title">Sanctuary</h4>
           <ul class="footer-links">
-            <li><a href="#gallery" class="footer-link">Gallery</a></li>
-            <li><a href="#inner-circle" class="footer-link">Inner Circle</a></li>
+            <li><a href="#visit-rsvp" class="footer-link">Join Opening List</a></li>
             <li><button type="button" class="footer-link footer-tree-link" id="footer-community-tree-link">Community Tree</button></li>
           </ul>
         </div>
@@ -1014,7 +996,33 @@ ${userName}`
   }
 
   /* ==========================================================================
-     12. Helpers (Modal, Toast, Scroll Animations)
+     9. Backwards-Compatible Hash Navigation Handling
+     ========================================================================== */
+  function initHashHandling() {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash === '#millet-marvels') {
+        const milletTab = document.getElementById('menu-tab-millets');
+        if (milletTab) milletTab.click();
+        document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (hash === '#inner-circle' || hash === '#contact' || hash === '#visit-rsvp') {
+        document.getElementById('visit')?.scrollIntoView({ behavior: 'smooth' });
+        if (hash === '#visit-rsvp') {
+          document.getElementById('ic-name')?.focus();
+        }
+      } else if (hash === '#signature-spotlight' || hash === '#craft-process' || hash === '#experience') {
+        document.getElementById('story')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+
+    if (window.location.hash) {
+      setTimeout(handleHash, 250);
+    }
+    window.addEventListener('hashchange', handleHash);
+  }
+
+  /* ==========================================================================
+     10. Helpers (Modal, Toast, Scroll Animations)
      ========================================================================== */
   function initScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
@@ -1048,74 +1056,69 @@ ${userName}`
       modalKeydownHandler = null;
     };
 
-    if (action && action.text && action.url && actionBtn) {
-      actionBtn.textContent = action.text;
-      actionBtn.href = action.url;
-      actionBtn.style.display = 'inline-flex';
-      actionBtn.onclick = () => {
-        showToast("Opening your email app...");
-        setTimeout(closeModal, 400);
-      };
-      if (closeBtn) {
-        closeBtn.className = 'btn btn-secondary';
-        closeBtn.textContent = 'Close';
+    if (action && action.text && action.url) {
+      if (actionBtn) {
+        actionBtn.style.display = 'inline-block';
+        actionBtn.textContent = action.text;
+        actionBtn.href = action.url;
+        actionBtn.onclick = () => {
+          closeModal();
+        };
       }
-    } else if (actionBtn) {
-      actionBtn.style.display = 'none';
-      actionBtn.onclick = null;
-      if (closeBtn) {
-        closeBtn.className = 'btn btn-primary';
-        closeBtn.textContent = 'Understand';
-      }
+    } else {
+      if (actionBtn) actionBtn.style.display = 'none';
+    }
+
+    if (closeBtn) {
+      closeBtn.onclick = closeModal;
     }
 
     modalReturnFocus = document.activeElement;
     overlay?.classList.add('open');
+    closeBtn?.focus();
 
-    if (action && actionBtn) {
-      actionBtn.focus();
-    } else {
-      closeBtn?.focus();
-    }
-
-    if (modalKeydownHandler) document.removeEventListener('keydown', modalKeydownHandler);
-    modalKeydownHandler = (e) => {
-      if (e.key === 'Escape') closeModal();
-      if (e.key === 'Tab' && overlay) trapFocus(e, overlay);
-    };
-    document.addEventListener('keydown', modalKeydownHandler);
-
-    if (closeBtn) closeBtn.onclick = closeModal;
     if (overlay) {
       overlay.onclick = (e) => {
         if (e.target === overlay) closeModal();
       };
     }
+
+    modalKeydownHandler = (e) => {
+      if (!overlay?.classList.contains('open')) return;
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Tab') trapFocus(e, overlay);
+    };
+    document.addEventListener('keydown', modalKeydownHandler);
   }
 
-  function trapFocus(event, container) {
-    const focusable = [...container.querySelectorAll(
-      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    )].filter(el => !el.hasAttribute('hidden'));
-    if (!focusable.length) return;
+  function trapFocus(e, container) {
+    const focusables = container.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusables.length) return;
 
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (event.shiftKey && document.activeElement === first) {
-      event.preventDefault();
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
       last.focus();
-    } else if (!event.shiftKey && document.activeElement === last) {
-      event.preventDefault();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
       first.focus();
     }
   }
+
   function showToast(message) {
     const toast = document.getElementById('toast-msg');
     if (!toast) return;
+
     toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-    }, 3200);
+    toast.classList.add('visible');
+
+    clearTimeout(toast.timeoutId);
+    toast.timeoutId = setTimeout(() => {
+      toast.classList.remove('visible');
+    }, 2800);
   }
 });
