@@ -117,14 +117,6 @@ window.SVADOTSAVA_DATA_MILLETS = {
       "imageAlt": "Artisanal Millet Plain Dosa folded into a golden crispy roll with trio of chutneys"
     },
     {
-      "grain": "Oat & Dry Fruit Cookies",
-      "benefit": "Hearty cookies with rolled oats, jaggery, warm spices, nuts, seeds, and raisins for a satisfying teatime bite.",
-      "dishPreview": "Cookie · Loaded with dry fruits",
-      "icon": "🍪",
-      "image": "assets/images/millets/oat_dryfruit_cookies.webp",
-      "imageAlt": "Oat and dry fruit cookies with nuts, seeds, and raisins"
-    },
-    {
       "grain": "Ragi Laddus",
       "benefit": "Earthy, comforting ragi laddus rolled with natural sweetness and a traditional touch that feels instantly familiar.",
       "dishPreview": "Laddu · Classic comfort",

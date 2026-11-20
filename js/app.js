@@ -1,12 +1,13 @@
 /**
  * Svādotsava - Core Application Logic & Interactive Features
  * ------------------------------------------------------------------
- * Renders the streamlined café experience:
+ * Renders the café and restaurant experience:
  * 1. Hero Introduction
- * 2. Unified Café & Dining Menu (with Chutney Trinity & live search)
- * 3. Our Story, Living Craft & Sanctuary Spaces
- * 4. Atmosphere & Gallery
- * 5. Visit Sanctuary, Opening Status & Opening Guest List
+ * 2. The Café Menu (Beverages, Sourdough Pizzas, Artisanal Toasts & Bakes)
+ * 3. The Millet Menu (Heritage Dosas, Chutney Trinity & Ancient Grain Laddus)
+ * 4. Our Story, Living Craft & Sanctuary Spaces
+ * 5. Atmosphere & Gallery
+ * 6. Visit Sanctuary, Opening Status & Opening Guest List
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   renderHero(DATA.hero);
   renderMenu(DATA.menuCategories, DATA.menuItems);
+  renderMilletMarvels(DATA.milletMarvels);
   renderStory(DATA.story, DATA.signatureSpotlight, DATA.craftProcess, DATA.experiences);
   renderGallery(DATA.gallery);
   renderVisitSanctuary(DATA.visitSanctuary, DATA.announcement, DATA.innerCircle, DATA.business);
@@ -133,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollPos = (window.scrollY || window.pageYOffset || 0) + 160;
     const navLinks = document.querySelectorAll('.nav-link');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
-    const sectionIds = ['hero', 'menu', 'story', 'gallery', 'visit'];
+    const sectionIds = ['hero', 'menu', 'millet-marvels', 'story', 'gallery', 'visit'];
     const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
     if (!sections.length) return;
 
@@ -192,8 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
           </h2>
           <p class="hero-intro">${heroData.intro}</p>
           <div class="hero-ctas">
-            <a href="#menu" class="btn btn-primary">${heroData.primaryBtn || 'Explore Menu'}</a>
-            <a href="#visit" class="btn btn-secondary">${heroData.secondaryBtn || 'Plan Your Visit'}</a>
+            <a href="#menu" class="btn btn-primary">${heroData.primaryBtn || 'Explore Café Menu'}</a>
+            <a href="#millet-marvels" class="btn btn-secondary">Millet Menu</a>
           </div>
         </div>
         <div class="hero-image-wrap reveal-on-scroll">
@@ -213,70 +215,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     3. Café Menu Rendering (Unified with Chutney Trinity & Live Search)
+     3. Café Menu Rendering (Coffee, Tea, Pizzas, Toasts, Bowls & Bakes)
      ========================================================================== */
   function renderMenu(categories, items) {
     const container = document.getElementById('menu-content-wrap');
     if (!container) return;
 
+    // Filter categories to relevant café offerings
+    const cafeCategories = categories.filter(c => c.id !== 'millets');
+
     container.innerHTML = `
       <div style="text-align: center;">
         <div class="section-tag" style="justify-content: center;">Opening Café Collection</div>
-        <h2 class="section-title">The Café & Dining Menu</h2>
+        <h2 class="section-title">The Café Menu</h2>
         <p class="section-subtitle" style="margin: 0 auto 2rem; max-width: 650px;">
-          Specialty coffee, fragrant teas, cast-iron millet dosas with fresh chutney trinity, sourdough pizzas, and wholesome treats.
+          Specialty coffee, fragrant estate teas, sourdough pizzas, artisanal toasts, and thoughtful café plates.
         </p>
-      </div>
-
-      <!-- The Chutney Trinity Showcase -->
-      <div class="menu-chutney-banner reveal-on-scroll">
-        <div class="chutney-trinity-card menu-chutney-card">
-          <div class="menu-chutney-header">
-            <span class="menu-chutney-badge">🌾 Heritage Craft Accompaniment</span>
-            <h3 class="menu-chutney-title">The Chutney Trinity</h3>
-            <p class="menu-chutney-sub">
-              Freshly stone-ground daily in small batches · Accompanying all our cast-iron heritage millet dosas
-            </p>
-          </div>
-          <div class="chutney-trinity-grid menu-chutney-horizontal">
-            <div class="chutney-item">
-              <div class="chutney-icon-wrap" aria-hidden="true">🍅</div>
-              <div class="chutney-text">
-                <strong class="chutney-name">Tamato Chutney</strong>
-                <span class="chutney-label">Zesty & Tangy</span>
-                <p class="chutney-desc">Ripe vine tomatoes, brown mustard seeds, roasted dal & crisp curry leaves.</p>
-              </div>
-            </div>
-            <div class="chutney-item">
-              <div class="chutney-icon-wrap" aria-hidden="true">🥜</div>
-              <div class="chutney-text">
-                <strong class="chutney-name">Ground Nut Chutney</strong>
-                <span class="chutney-label">Creamy & Nutty</span>
-                <p class="chutney-desc">Slow-roasted peanuts, green chilies, cumin & fresh ginger.</p>
-              </div>
-            </div>
-            <div class="chutney-item">
-              <div class="chutney-icon-wrap" aria-hidden="true">🌿</div>
-              <div class="chutney-text">
-                <strong class="chutney-name">Pudina Chutney</strong>
-                <span class="chutney-label">Herbaceous & Fresh</span>
-                <p class="chutney-desc">Hand-picked estate mint, fresh coriander, roasted chana & touch of lime.</p>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Live Search Bar -->
       <div class="menu-search-wrap">
         <span class="menu-search-icon" aria-hidden="true">🔍</span>
-        <input type="search" id="menu-search-input" class="menu-search-input" placeholder="Search dishes, drinks, or ingredients (e.g. Masala Dosa, Filter Coffee)..." aria-label="Search menu items" />
+        <input type="search" id="menu-search-input" class="menu-search-input" placeholder="Search coffee, tea, pizzas, toasts, bowls..." aria-label="Search café menu items" />
         <button type="button" id="menu-search-clear" class="menu-search-clear" aria-label="Clear search" style="display: none;">✕</button>
       </div>
 
       <!-- Category Filter Pills -->
-      <div class="menu-filter-bar" id="menu-filter-bar" role="tablist" aria-label="Menu Category Filters">
-        ${categories.map(cat => `
+      <div class="menu-filter-bar" id="menu-filter-bar" role="tablist" aria-label="Café Menu Category Filters">
+        ${cafeCategories.map(cat => `
           <button
             type="button"
             role="tab"
@@ -365,11 +331,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!menuGrid) return;
     menuGrid.setAttribute('aria-labelledby', `menu-tab-${categoryId}`);
 
-    const categoryPriority = { millets: 0, coffee: 1, tea: 2, cafe: 3, desserts: 4 };
+    const categoryPriority = { coffee: 0, tea: 1, cafe: 2, desserts: 3 };
+
+    // Filter out millet items so they remain exclusively featured in the Millet Menu section
+    let cafeItems = items.filter(it => it.category !== 'millets');
 
     let filtered = (categoryId === 'all'
-      ? [...items].sort((a, b) => (categoryPriority[a.category] ?? 9) - (categoryPriority[b.category] ?? 9))
-      : items.filter(item => item.category === categoryId));
+      ? [...cafeItems].sort((a, b) => (categoryPriority[a.category] ?? 9) - (categoryPriority[b.category] ?? 9))
+      : cafeItems.filter(item => item.category === categoryId));
 
     if (query) {
       filtered = filtered.filter(item => {
@@ -385,7 +354,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="menu-empty-state" style="grid-column: 1 / -1;">
           <div class="menu-empty-icon" aria-hidden="true">🍽️</div>
           <h3>No dishes found</h3>
-          <p>We couldn't find any items matching "${query}". Try searching for another dish or clear the filter.</p>
+          <p>We couldn't find any café items matching "${query}". Try searching for another item or clear the filter.</p>
           <button type="button" class="btn btn-secondary btn-sm" id="btn-clear-search-empty">
             Clear Search Filter
           </button>
@@ -428,7 +397,125 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     4. Our Story, Living Craft & Spaces
+     4. Millet Menu Rendering (Dosa Collection, Chutney Trinity & Laddus)
+     ========================================================================== */
+  function renderMilletMarvels(milletData) {
+    const container = document.getElementById('millet-content');
+    if (!container || !milletData) return;
+
+    const dosaFeat = milletData.dosaFeature;
+
+    container.innerHTML = `
+      <div class="millet-heading">
+        <div>
+          <div class="section-tag">Heritage Grain Collection</div>
+          <h2 class="section-title">The Millet Menu</h2>
+          <p class="section-subtitle">${milletData.subheading || 'Cast-Iron Dosas, Stone-Ground Chutney Trinity & Heritage Treats'}</p>
+          <p class="millet-intro">${milletData.intro}</p>
+        </div>
+        <img class="millet-hero-image" src="${milletData.image}" alt="${milletData.imageAlt}" loading="lazy" />
+      </div>
+
+      ${dosaFeat ? `
+        <div class="millet-dosa-showcase reveal-on-scroll">
+          <div class="millet-dosa-grid">
+            <div class="millet-dosa-media">
+              <figure class="millet-dosa-figure">
+                <img src="${dosaFeat.image}" alt="${dosaFeat.imageAlt}" loading="lazy" />
+                <figcaption class="millet-dosa-badge">${dosaFeat.badge}</figcaption>
+              </figure>
+
+              <!-- The Chutney Trinity Card -->
+              <div class="chutney-trinity-card">
+                <div class="chutney-trinity-header">
+                  <span class="chutney-header-icon" aria-hidden="true">🥣</span>
+                  <div>
+                    <h4 class="chutney-trinity-title">${dosaFeat.chutneysTitle || 'The Chutney Trinity'}</h4>
+                    <p class="chutney-trinity-sub">Ground fresh daily in small stone batches</p>
+                  </div>
+                </div>
+                <div class="chutney-trinity-grid">
+                  ${(dosaFeat.chutneys || []).map(ch => `
+                    <div class="chutney-item">
+                      <div class="chutney-icon-wrap" aria-hidden="true">${ch.icon}</div>
+                      <div class="chutney-text">
+                        <strong class="chutney-name">${ch.name}</strong>
+                        <span class="chutney-label">${ch.label}</span>
+                        <p class="chutney-desc">${ch.description}</p>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+
+            <div class="millet-dosa-content">
+              <div class="section-kicker">Cast-Iron Heritage Crepes</div>
+              <h3 class="millet-dosa-title">${dosaFeat.title}</h3>
+              <p class="millet-dosa-subtitle">${dosaFeat.subtitle}</p>
+              <p class="millet-dosa-desc">${dosaFeat.description}</p>
+
+              <div class="dosa-varieties-list">
+                ${(dosaFeat.dosas || []).map(dosa => `
+                  <div class="dosa-variety-card">
+                    ${dosa.image ? `
+                      <div class="dosa-variety-thumb-wrap">
+                        <img src="${dosa.image}" alt="${dosa.name}" class="dosa-variety-thumb" loading="lazy" />
+                      </div>
+                    ` : ''}
+                    <div class="dosa-variety-info">
+                      <div class="dosa-variety-header">
+                        <div>
+                          <h4 class="dosa-variety-name">${dosa.name}</h4>
+                          <span class="dosa-grains-tag">🌾 ${dosa.grains}</span>
+                        </div>
+                        <span class="badge badge-gold-sm">${dosa.type}</span>
+                      </div>
+                      <p class="dosa-variety-desc">${dosa.description}</p>
+                      <div class="dosa-accompaniment">
+                        <span class="dosa-acc-icon">✨</span>
+                        <span><strong>Accompaniment:</strong> ${dosa.servedWith}</span>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- Traditional Heritage Laddus -->
+      <div class="millet-sub-heading reveal-on-scroll" style="margin-top: 4.5rem;">
+        <div class="section-tag" style="justify-content: center;">Traditional Heritage Confections</div>
+        <h3 class="section-title" style="font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: 0.5rem; text-align: center;">
+          Heritage Millet Laddus & Treats
+        </h3>
+        <p class="section-subtitle" style="margin: 0 auto 2.5rem; text-align: center; max-width: 600px;">
+          Wholesome palm jaggery laddus and traditional confectionery hand-rolled with pure desi ghee and heirloom grains.
+        </p>
+      </div>
+
+      <div class="millet-cards-grid">
+        ${(milletData.cards || []).filter(c => !c.grain.toLowerCase().includes('dosa') && !c.grain.toLowerCase().includes('cookie') && !c.grain.toLowerCase().includes('biscuit')).map(card => `
+          <article class="millet-card reveal-on-scroll">
+            <img class="millet-card-image" src="${card.image}" alt="${card.imageAlt}" loading="lazy" />
+            <div class="millet-card-body">
+              <div class="millet-card-header">
+                <span class="millet-card-icon" aria-hidden="true">${card.icon}</span>
+                <span class="millet-dish-tag">${card.dishPreview}</span>
+              </div>
+              <h4 class="millet-card-title">${card.grain}</h4>
+              <p class="millet-card-desc">${card.benefit}</p>
+            </div>
+          </article>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  /* ==========================================================================
+     5. Our Story, Living Craft & Spaces
      ========================================================================== */
   function renderStory(storyData, spotlightData, processData, experiences) {
     const container = document.getElementById('story-content');
@@ -462,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         </div>
 
-        <!-- 2. Signature Craft Coffee & Cast-Iron Spotlight -->
+        <!-- 2. Signature Craft Coffee Spotlight -->
         ${spotlightData ? `
           <div class="story-sub-block" id="signature-spotlight-block">
             <div class="signature-spotlight-grid">
@@ -485,7 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   `).join('')}
                 </dl>
                 <div class="signature-actions">
-                  <a href="#menu" class="btn btn-primary">${spotlightData.primaryBtn || 'Explore Menu'}</a>
+                  <a href="#menu" class="btn btn-primary">${spotlightData.primaryBtn || 'Explore Café Menu'}</a>
                 </div>
               </div>
             </div>
@@ -554,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     5. Gallery Rendering & Lightbox
+     6. Gallery Rendering & Lightbox
      ========================================================================== */
   function renderGallery(galleryData) {
     const grid = document.getElementById('gallery-grid');
@@ -652,7 +739,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     6. Visit Us, Opening Status & Guest List RSVP
+     7. Visit Us, Opening Status & Guest List RSVP
      ========================================================================== */
   function renderVisitSanctuary(visitData, annData, circleData, bizData) {
     const container = document.getElementById('visit-content');
@@ -810,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ==========================================================================
-     7. Form Validation & Inner Circle Mailto Action
+     8. Form Validation & Inner Circle Mailto Action
      ========================================================================== */
   function initFormValidation() {
     const form = document.getElementById('inner-circle-form');
@@ -885,7 +972,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const userName = nameInput.value.trim();
       const userEmail = emailInput.value.trim();
       const userCity = cityInput.value.trim();
-      const interestList = selectedInterests.length > 0 ? selectedInterests.join(', ') : 'All Café Offerings';
+      const interestList = selectedInterests.length > 0 ? selectedInterests.join(', ') : 'All Offerings';
 
       const emailSubject = encodeURIComponent(`Svādotsava Opening Guest List — ${userName}`);
       const emailBody = encodeURIComponent(
@@ -919,7 +1006,7 @@ ${userName}`
   }
 
   /* ==========================================================================
-     8. Footer Rendering
+     9. Footer Rendering
      ========================================================================== */
   function renderFooter(biz) {
     const container = document.getElementById('footer-content');
@@ -940,6 +1027,7 @@ ${userName}`
           <ul class="footer-links">
             <li><a href="#hero" class="footer-link">Home</a></li>
             <li><a href="#menu" class="footer-link">Café Menu</a></li>
+            <li><a href="#millet-marvels" class="footer-link">Millet Menu</a></li>
             <li><a href="#story" class="footer-link">Our Story & Craft</a></li>
             <li><a href="#gallery" class="footer-link">Atmosphere & Gallery</a></li>
             <li><a href="#visit" class="footer-link">Visit & Hours</a></li>
@@ -996,14 +1084,14 @@ ${userName}`
   }
 
   /* ==========================================================================
-     9. Backwards-Compatible Hash Navigation Handling
+     10. Backwards-Compatible Hash Navigation Handling
      ========================================================================== */
   function initHashHandling() {
     const handleHash = () => {
       const hash = window.location.hash;
-      if (hash === '#millet-marvels') {
-        const milletTab = document.getElementById('menu-tab-millets');
-        if (milletTab) milletTab.click();
+      if (hash === '#millet-marvels' || hash === '#millet-menu') {
+        document.getElementById('millet-marvels')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (hash === '#menu' || hash === '#cafe-menu') {
         document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
       } else if (hash === '#inner-circle' || hash === '#contact' || hash === '#visit-rsvp') {
         document.getElementById('visit')?.scrollIntoView({ behavior: 'smooth' });
@@ -1022,7 +1110,7 @@ ${userName}`
   }
 
   /* ==========================================================================
-     10. Helpers (Modal, Toast, Scroll Animations)
+     11. Helpers (Modal, Toast, Scroll Animations)
      ========================================================================== */
   function initScrollAnimations() {
     const observer = new IntersectionObserver((entries) => {
