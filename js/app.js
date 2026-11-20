@@ -404,11 +404,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container || !milletData) return;
 
     const dosaFeat = milletData.dosaFeature;
+    // Distinct primary dosa varieties
+    const primaryDosas = (dosaFeat.dosas || []).filter(d => d.id !== 'millet-ghee-roast-dosa');
 
     container.innerHTML = `
       <div class="millet-heading">
         <div>
-          <div class="section-tag">Heritage Grain Collection</div>
+          <div class="section-tag">Ancient Grain Heritage</div>
           <h2 class="section-title">The Millet Menu</h2>
           <p class="section-subtitle">${milletData.subheading || 'Cast-Iron Dosas, Stone-Ground Chutney Trinity & Heritage Treats'}</p>
           <p class="millet-intro">${milletData.intro}</p>
@@ -417,76 +419,74 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
 
       ${dosaFeat ? `
-        <div class="millet-dosa-showcase reveal-on-scroll">
-          <div class="millet-dosa-grid">
-            <div class="millet-dosa-media">
-              <figure class="millet-dosa-figure">
-                <img src="${dosaFeat.image}" alt="${dosaFeat.imageAlt}" loading="lazy" />
-                <figcaption class="millet-dosa-badge">${dosaFeat.badge}</figcaption>
-              </figure>
+        <div class="dosa-collection-wrap reveal-on-scroll">
+          <div class="dosa-collection-header">
+            <div class="section-kicker">Cast-Iron Heritage Crepes</div>
+            <h3 class="section-title" style="font-size: clamp(1.6rem, 2.8vw, 2.3rem); margin-bottom: 0.75rem;">
+              ${dosaFeat.title}
+            </h3>
+            <p class="section-subtitle" style="margin: 0 auto 1.25rem; max-width: 680px;">
+              ${dosaFeat.subtitle}
+            </p>
+            <p style="color: var(--text-medium); font-size: 0.95rem; line-height: 1.6; max-width: 720px; margin: 0 auto;">
+              ${dosaFeat.description}
+            </p>
+          </div>
 
-              <!-- The Chutney Trinity Card -->
-              <div class="chutney-trinity-card">
-                <div class="chutney-trinity-header">
-                  <span class="chutney-header-icon" aria-hidden="true">🥣</span>
-                  <div>
-                    <h4 class="chutney-trinity-title">${dosaFeat.chutneysTitle || 'The Chutney Trinity'}</h4>
-                    <p class="chutney-trinity-sub">Ground fresh daily in small stone batches</p>
-                  </div>
-                </div>
-                <div class="chutney-trinity-grid">
-                  ${(dosaFeat.chutneys || []).map(ch => `
-                    <div class="chutney-item">
-                      <div class="chutney-icon-wrap" aria-hidden="true">${ch.icon}</div>
-                      <div class="chutney-text">
-                        <strong class="chutney-name">${ch.name}</strong>
-                        <span class="chutney-label">${ch.label}</span>
-                        <p class="chutney-desc">${ch.description}</p>
-                      </div>
-                    </div>
-                  `).join('')}
-                </div>
+          <!-- The Chutney Trinity Showcase Banner -->
+          <div class="menu-chutney-banner">
+            <div class="chutney-trinity-card menu-chutney-card">
+              <div class="menu-chutney-header">
+                <span class="menu-chutney-badge">🌾 Daily Stone-Ground Accompaniment</span>
+                <h4 class="menu-chutney-title">${dosaFeat.chutneysTitle || 'Served With The Chutney Trinity'}</h4>
+                <p class="menu-chutney-sub">Every heritage dosa is paired with our three signature house chutneys, ground fresh daily on granite stones:</p>
               </div>
-            </div>
-
-            <div class="millet-dosa-content">
-              <div class="section-kicker">Cast-Iron Heritage Crepes</div>
-              <h3 class="millet-dosa-title">${dosaFeat.title}</h3>
-              <p class="millet-dosa-subtitle">${dosaFeat.subtitle}</p>
-              <p class="millet-dosa-desc">${dosaFeat.description}</p>
-
-              <div class="dosa-varieties-list">
-                ${(dosaFeat.dosas || []).map(dosa => `
-                  <div class="dosa-variety-card">
-                    ${dosa.image ? `
-                      <div class="dosa-variety-thumb-wrap">
-                        <img src="${dosa.image}" alt="${dosa.name}" class="dosa-variety-thumb" loading="lazy" />
-                      </div>
-                    ` : ''}
-                    <div class="dosa-variety-info">
-                      <div class="dosa-variety-header">
-                        <div>
-                          <h4 class="dosa-variety-name">${dosa.name}</h4>
-                          <span class="dosa-grains-tag">🌾 ${dosa.grains}</span>
-                        </div>
-                        <span class="badge badge-gold-sm">${dosa.type}</span>
-                      </div>
-                      <p class="dosa-variety-desc">${dosa.description}</p>
-                      <div class="dosa-accompaniment">
-                        <span class="dosa-acc-icon">✨</span>
-                        <span><strong>Accompaniment:</strong> ${dosa.servedWith}</span>
-                      </div>
+              <div class="chutney-trinity-grid menu-chutney-horizontal">
+                ${(dosaFeat.chutneys || []).map(ch => `
+                  <div class="chutney-item">
+                    <div class="chutney-icon-wrap" aria-hidden="true">${ch.icon}</div>
+                    <div class="chutney-text">
+                      <strong class="chutney-name">${ch.name}</strong>
+                      <span class="chutney-label">${ch.label}</span>
+                      <p class="chutney-desc">${ch.description}</p>
                     </div>
                   </div>
                 `).join('')}
               </div>
             </div>
           </div>
+
+          <!-- The Dosa Varieties Card Grid -->
+          <div class="dosa-collection-grid">
+            ${primaryDosas.map(dosa => `
+              <article class="dosa-card-item reveal-on-scroll">
+                ${dosa.image ? `
+                  <div class="dosa-card-img-wrap">
+                    <img src="${dosa.image}" alt="${dosa.name}" loading="lazy" />
+                    <span class="dosa-card-badge">${dosa.type}</span>
+                  </div>
+                ` : ''}
+                <div class="dosa-card-body">
+                  <div class="dosa-card-header">
+                    <h4 class="dosa-card-title">${dosa.name}</h4>
+                  </div>
+                  <div class="dosa-card-grains">
+                    <span>🌾</span> <span>${dosa.grains}</span>
+                  </div>
+                  <p class="dosa-card-desc">${dosa.description}</p>
+                  <div class="dosa-card-acc">
+                    <span aria-hidden="true">🥣</span>
+                    <span><strong>Served With:</strong> ${dosa.servedWith}</span>
+                  </div>
+                </div>
+              </article>
+            `).join('')}
+          </div>
         </div>
       ` : ''}
 
       <!-- Traditional Heritage Laddus -->
-      <div class="millet-sub-heading reveal-on-scroll" style="margin-top: 4.5rem;">
+      <div class="millet-sub-heading reveal-on-scroll" style="margin-top: 5rem;">
         <div class="section-tag" style="justify-content: center;">Traditional Heritage Confections</div>
         <h3 class="section-title" style="font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: 0.5rem; text-align: center;">
           Heritage Millet Laddus & Treats
